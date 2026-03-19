@@ -11,6 +11,13 @@
 npm-debug.log
 yarn-error.log
 
+# Jest
+/coverage
+/jest-cache/
+
+# ESLint
+.eslintcache
+
 # IDEs and editors
 .idea/
 .project
@@ -20,20 +27,22 @@ yarn-error.log
 .settings/
 *.sublime-workspace
 
-# Visual Studio Code
+# VSCode
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+!.vscode/*.code-snippets
 .history/*
 
-# Miscellaneous
+# Angular
 /.angular/cache
+
+# Misc
 .sass-cache/
-/connect.lock
-/coverage
-/libpeerconnection.log
+connect.lock
+libpeerconnection.log
 testem.log
 /typings
 __screenshots__/
@@ -41,3 +50,6 @@ __screenshots__/
 # System files
 .DS_Store
 Thumbs.db
+
+# Local mock data (RPG project)
+db.json

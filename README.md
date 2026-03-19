@@ -1,59 +1,62 @@
-# AngularHero
+# 🎮 Angular Hero — Rise of the Dev
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.4.
+A gamified Angular learning project built as a RPG.
 
-## Development server
+## 🧙 Concept
 
-To start a local development server, run:
+You play as a developer building a RPG while learning Angular step by step.
+
+- Create a hero
+- Manage inventory
+- Fight enemies
+- Complete quests
+- Gain XP (both in-game and as a developer)
+
+## 🎯 Goals
+
+- Master modern Angular (standalone + signals)
+- Build a scalable and clean architecture
+- Learn by doing (no tutorial hell)
+
+## 🧱 Tech Stack
+
+- Angular (standalone API)
+- TypeScript (strict)
+- Signals (primary state management)
+- RxJS (async flows, advanced use cases)
+- Jest (unit testing)
+- json-server (mock backend)
+
+## 🚀 Getting Started
 
 ```bash
+npm install
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## 🧪 Testing
 
 ```bash
-ng generate component component-name
+npm run test
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## 🌐 Mock API
 
 ```bash
-ng generate --help
+npm run mock
 ```
 
-## Building
+## 📚 Documentation
 
-To build the project run:
+- ROADMAP.md → global learning path
+- RULES.md → learning system rules
+- CONVENTIONS.md → code standards
+- PROGRESS.md → current progress
+- AI_CONTEXT.md → AI onboarding context
 
-```bash
-ng build
-```
+## 🎮 Progression
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+XP: 0
+Level: 1
 
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+See PROGRESS.md for details.
