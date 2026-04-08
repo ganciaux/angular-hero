@@ -8,13 +8,20 @@
 
 ## 📈 Progression Rule
 
-- Do not start the next mission before the current one is listed in Completed Missions in PROGRESS.md
+- Do not start a new mission before the previous one is listed in Completed Missions in PROGRESS.md
 
 ## 🧠 Learning Rules
 
 - No copy/paste (except project structure & setup)
 - Try first, then ask for hints
 - Understand before moving on
+
+## 🧪 Testing Rules
+
+- Tests are not mandatory at every mission
+- Write tests when the mission concept involves testable logic (service, pipe, guard, etc.)
+- Write tests incrementally — never batch all tests at the end
+- Prefer one focused test per new behavior introduced
 
 ## 🔍 Code Review Rules
 

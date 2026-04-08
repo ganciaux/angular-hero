@@ -1,14 +1,11 @@
 # 📊 Progress
 
-## 🧩 Current Mission
-
-- None
-
 ## ✅ Completed Missions
 
 - 000-prelude
 - 001-project-architecture
 - 002-routing-and-layout
+- 003-navigation
 
 ## 🧠 Learned Concepts
 

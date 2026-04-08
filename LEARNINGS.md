@@ -51,6 +51,20 @@ layout.html   → <router-outlet />  = children: [] of layout route
 ]}
 ```
 
+### RouterLink active state — exact matching
+
+`routerLinkActive="active"` marks a link active if the current URL **contains** the path.
+With `path: ''` (home on root `/`), the link matches ALL URLs → both Home and About appear active.
+
+Fix: use `[routerLinkActiveOptions]="{ exact: true }"` to require an exact URL match.
+
+```html
+<a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
+<a routerLink="/about" routerLinkActive="active">About</a>
+```
+
+Good reflex: when Angular behavior seems too broad → look for an `exact` or `strict` option.
+
 ### Flat layout component
 
 A component without sub-components does not need its own subfolder.
