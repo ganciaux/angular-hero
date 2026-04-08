@@ -53,3 +53,6 @@ Thumbs.db
 
 # Local mock data (RPG project)
 db.json
+
+#Claude
+.claude

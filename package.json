@@ -10,7 +10,7 @@
     "test:coverage": "jest --coverage",
     "lint": "ng lint",
     "format": "prettier --write .",
-    "server": "json-server --watch db.json --port 3000"
+    "server": "json-server --watch server/db.json --port 3000"
   },
   "prettier": {
     "printWidth": 100,

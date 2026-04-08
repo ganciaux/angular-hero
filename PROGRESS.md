@@ -2,7 +2,7 @@
 
 ## 🧩 Current Mission
 
-- None
+- 001-project-architecture
 
 ## ✅ Completed Missions
 

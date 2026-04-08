@@ -54,6 +54,7 @@ npm run server
 - GIT_WORKFLOW.md → git rules & workflow
 - PROGRESS.md → current progress
 - AI_CONTEXT.md → AI onboarding context
+- LEARNINGS.md → personal concept notes
 
 ## 📊 Progress
 

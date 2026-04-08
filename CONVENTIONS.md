@@ -47,15 +47,23 @@ hero/
 src/
   app/
     core/               → singleton services, guards, interceptors
-    shared/             → reusable components, pipes, directives
+      guards/
+      interceptors/
+      services/
+    shared/             → reusable UI across features
+      components/
+      directives/
+      models/           → interfaces shared across multiple features
+      pipes/
     features/           → one folder per feature
       hero/
         hero.component.ts
         hero.component.html
-        hero.component.css
+        hero.component.scss
         hero.service.ts
-        hero.model.ts
+        hero.model.ts   → feature-specific model
         hero.routes.ts
+    layout/             → layout components (navbar, sidebar, etc.)
     app.component.ts
     app.component.html
     app.config.ts
