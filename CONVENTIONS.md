@@ -15,16 +15,26 @@
 
 ## 📁 File Naming
 
-Angular standard suffixes (Angular CLI convention):
+Angular 20+ convention (no `.component.` suffix):
 
 ```
 hero/
-  hero.component.ts
-  hero.component.html
-  hero.component.css
+  hero.ts          ← component
+  hero.html
+  hero.scss
   hero.service.ts
   hero.model.ts
   hero.routes.ts
+  hero.spec.ts
+```
+
+Class naming:
+
+```typescript
+export class Hero { }            // component → no suffix
+export class HeroService { }     // service   → keep suffix
+export class AuthGuard { }       // guard     → keep suffix
+export class AuthInterceptor { } // interceptor → keep suffix
 ```
 
 ## 🧠 Code Rules
@@ -57,15 +67,16 @@ src/
       pipes/
     features/           → one folder per feature
       hero/
-        hero.component.ts
-        hero.component.html
-        hero.component.scss
+        hero.ts
+        hero.html
+        hero.scss
         hero.service.ts
         hero.model.ts   → feature-specific model
         hero.routes.ts
+        hero.spec.ts
     layout/             → layout components (navbar, sidebar, etc.)
-    app.component.ts
-    app.component.html
+    app.ts
+    app.html
     app.config.ts
     app.routes.ts
   assets/
