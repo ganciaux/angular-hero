@@ -15,11 +15,17 @@
 
 ## 📁 File Naming
 
-hero/
+Angular standard suffixes (Angular CLI convention):
 
-- hero.ts
-- hero.html
-- hero.css
+```
+hero/
+  hero.component.ts
+  hero.component.html
+  hero.component.css
+  hero.service.ts
+  hero.model.ts
+  hero.routes.ts
+```
 
 ## 🧠 Code Rules
 
@@ -35,6 +41,29 @@ hero/
 - Core = singleton services
 - Shared = reusable UI
 
+## 📂 Folder Structure
+
+```
+src/
+  app/
+    core/               → singleton services, guards, interceptors
+    shared/             → reusable components, pipes, directives
+    features/           → one folder per feature
+      hero/
+        hero.component.ts
+        hero.component.html
+        hero.component.css
+        hero.service.ts
+        hero.model.ts
+        hero.routes.ts
+    app.component.ts
+    app.component.html
+    app.config.ts
+    app.routes.ts
+  assets/
+  environments/
+```
+
 ## Mock backend
 
 - json-server used for API mocking
@@ -43,51 +72,4 @@ hero/
 
 ## 🔀 Git
 
-Format:
-type(scope): message
-
-Examples:
-feat(hero): create hero component
-feat(combat): add attack system
-
-Types:
-
-- feat
-- fix
-- chore
-- refactor
-- test
-
-## 🔀 Git Workflow
-
-### Mission workflow
-
-- Work on a temporary branch: `mission/<id>-<name>`
-- Commit freely during development (WIP, fixes allowed)
-- Before merging:
-  - Clean history (rebase -i or squash)
-  - Keep **1 clean commit per mission**
-
-### Main branch
-
-- Only clean commits
-- 1 commit = 1 mission
-
-### Tags
-
-- Use tags to mark phases:
-
-Example:
-git checkout -b mission/001-init-project
-
-git commit -m "wip: start setup"
-git commit -m "fix: routing issue"
-git commit -m "fix: jest config"
-
-# review
-
-git checkout main
-git merge --squash mission/001-init-project
-git commit -m "chore(init): project setup with angular, jest and json-server"
-
-git tag phase-1-foundations
+See GIT_WORKFLOW.md for all git rules, commit conventions and step-by-step workflow.

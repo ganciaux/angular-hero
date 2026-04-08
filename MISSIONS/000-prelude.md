@@ -1,9 +1,5 @@
 # Mission 000 — Prelude: The Forge
 
-## LEVEL
-
-⚫
-
 ## Concept Angular
 
 Project setup & tooling
@@ -31,10 +27,3 @@ Initialize a professional Angular project with tooling and documentation.
 - mock server runs
 - documentation complete
 
-## XP
-
-20 XP
-
-## Status
-
-⬜ Not started

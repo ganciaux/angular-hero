@@ -1,4 +1,4 @@
-# 🧠 Git Cheat Sheet — Angular Hero
+# 🔀 Git Workflow — Angular Hero
 
 A minimal and practical Git guide for this project.
 

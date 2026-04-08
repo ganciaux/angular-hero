@@ -1,23 +1,16 @@
 # 📊 Progress
 
-## 🎮 Player
-
-Level: 1
-XP: 0
-
 ## 🧩 Current Mission
 
-- 000-prelude
+- None
 
 ## ✅ Completed Missions
 
-- None
+- 000-prelude
 
 ## 🧠 Learned Concepts
 
 - Project setup
 - Tooling (Jest, json-server)
-
-## 🎯 Next Mission
-
-- 001-init-project
+- Jest config (ts-jest, esModuleInterop)
+- Git workflow (branch, squash, commit conventions)

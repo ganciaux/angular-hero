@@ -10,7 +10,7 @@ You play as a developer building a RPG while learning Angular step by step.
 - Manage inventory
 - Fight enemies
 - Complete quests
-- Gain XP (both in-game and as a developer)
+- Level up your Angular skills while building the game
 
 ## 🎯 Goals
 
@@ -43,20 +43,18 @@ npm run test
 ## 🌐 Mock API
 
 ```bash
-npm run mock
+npm run server
 ```
 
 ## 📚 Documentation
 
 - ROADMAP.md → global learning path
-- RULES.md → learning system rules
-- CONVENTIONS.md → code standards
+- RULES.md → learning system & code review rules
+- CONVENTIONS.md → code standards & file naming
+- GIT_WORKFLOW.md → git rules & workflow
 - PROGRESS.md → current progress
 - AI_CONTEXT.md → AI onboarding context
 
-## 🎮 Progression
-
-XP: 0
-Level: 1
+## 📊 Progress
 
 See PROGRESS.md for details.

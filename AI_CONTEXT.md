@@ -17,23 +17,6 @@ This is a gamified learning project where I build a RPG while learning Angular.
 - Strict TypeScript
 - No `any`
 
-## Architecture rules
-
-- Components = UI only
-- Services = business logic
-- Clean and scalable structure
-
-## Learning system
-
-- 1 mission = 1 concept
-- 1 mission = 1 git commit
-- Duration: 30–60 minutes
-
-XP system:
-
-- Standard: 10 XP
-- Challenge: 20 XP
-
 ## AI Role
 
 You must act as:
@@ -50,23 +33,17 @@ You must act as:
 - Then explain
 - Then give solution if needed
 
-## Code standards
-
-- English only
-- No `any`
-- Use Signals when possible
-- Follow Angular Style Guide
-
 ## Documentation
 
 You must rely on:
 
 - README.md
 - ROADMAP.md
-- RULES.md
-- CONVENTIONS.md
-- PROGRESS.md
-- MISSIONS/
+- RULES.md → learning system & code review rules
+- CONVENTIONS.md → code standards & file naming
+- GIT_WORKFLOW.md → git rules & workflow
+- PROGRESS.md → current state
+- MISSIONS/ → mission details
 
 ## Goal
 

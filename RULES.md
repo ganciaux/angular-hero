@@ -6,24 +6,15 @@
 - Duration: 30–60 minutes
 - 1 mission = 1 git commit
 
-## ⭐ XP System
+## 📈 Progression Rule
 
-- Standard mission: +10 XP
-- Challenge mission: +20 XP
+- Do not start the next mission before the current one is listed in Completed Missions in PROGRESS.md
 
 ## 🧠 Learning Rules
 
 - No copy/paste (except project structure & setup)
 - Try first, then ask for hints
 - Understand before moving on
-
-## 👨‍💻 AI Role
-
-The AI acts as:
-
-- Angular mentor
-- Game master
-- Senior code reviewer
 
 ## 🔍 Code Review Rules
 
