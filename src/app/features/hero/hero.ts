@@ -10,5 +10,5 @@ import { HeroService } from './hero.service';
   styleUrl: './hero.scss',
 })
 export class Hero {
-  readonly heroService = inject(HeroService);
+  protected readonly heroService = inject(HeroService);
 }

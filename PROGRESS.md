@@ -12,6 +12,7 @@
 - 007-hero-output
 - 008-reusable-component
 - 009-hero-service
+- 010-inventory
 
 ## 🧠 Learned Concepts
 
@@ -37,3 +38,7 @@
 - `inject()` — new Angular injection API
 - `asReadonly()` — expose signal read-only from service
 - Separation of concerns: service owns state, component owns UI
+- `@for` with `track item.id` for object lists
+- `crypto.randomUUID()` for unique ids
+- `protected readonly` on injected service in component (template access only)
+- Template Literal Types in TypeScript (`${string}-${string}-...`)

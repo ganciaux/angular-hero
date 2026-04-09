@@ -154,6 +154,33 @@ Pass from parent template:
 
 Note: pass the signal **value** (`hero()`), not the signal itself (`hero`).
 
+### `protected` vs `readonly` — where to use what
+
+| Location | Pattern | Why |
+|---|---|---|
+| Component | `protected readonly heroService = inject(HeroService)` | Accessible from template + child classes, not from outside |
+| Service | `readonly hero = this._hero.asReadonly()` | Public — must be accessible from any injecting component |
+
+`protected` in a service makes no sense — it would prevent components from reading the signal.
+
+### `@for` with objects — always track by id
+
+```html
+@for (item of items(); track item.id) { ... }
+```
+
+Use `track item.id` (unique field), not `track $index`.
+`$index` is fragile: reordering or filtering causes Angular to re-render wrong items.
+
+### crypto.randomUUID()
+
+Native browser/Node API — no external dependency needed.
+Returns a v4 UUID typed as `` `${string}-${string}-${string}-${string}-${string}` `` (TypeScript Template Literal Type).
+
+```typescript
+const id = crypto.randomUUID(); // "550e8400-e29b-41d4-a716-446655440000"
+```
+
 ### Services — Injectable singleton
 
 ```typescript
