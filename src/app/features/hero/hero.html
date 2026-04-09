@@ -1,0 +1,7 @@
+@let heroData = hero();
+
+@if (isAlive()) {
+  <p>{{ heroData.name }} is alive with {{ heroData.hp }} HP.</p>
+} @else {
+  <p>{{ heroData.name }} has fallen in battle.</p>
+}

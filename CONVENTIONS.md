@@ -37,6 +37,14 @@ export class AuthGuard { }       // guard     → keep suffix
 export class AuthInterceptor { } // interceptor → keep suffix
 ```
 
+Model naming:
+
+When a model shares its name with a component (same feature), suffix the interface with `Model`:
+
+```typescript
+export interface HeroModel { }   // in hero.model.ts → avoids conflict with Hero component
+```
+
 ## 🧠 Code Rules
 
 - No `any`
