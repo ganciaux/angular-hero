@@ -154,6 +154,41 @@ Pass from parent template:
 
 Note: pass the signal **value** (`hero()`), not the signal itself (`hero`).
 
+### Services — Injectable singleton
+
+```typescript
+@Injectable({ providedIn: 'root' })
+export class HeroService {
+  // private writable signals
+  private _hero = signal<HeroModel>({...});
+  private _actionLogs = signal<string[]>([]);
+
+  // public read-only exposure
+  readonly hero = this._hero.asReadonly();
+  readonly actionLogs = this._actionLogs.asReadonly();
+}
+```
+
+**`asReadonly()` vs getter method:**
+
+```typescript
+// ❌ getter — not reactive
+getHero() { return this._hero(); }  // returns a value at a point in time
+
+// ✅ asReadonly() — reactive
+readonly hero = this._hero.asReadonly();  // Angular tracks changes, template updates automatically
+```
+
+**Inject in component:**
+
+```typescript
+export class Hero {
+  readonly heroService = inject(HeroService);
+}
+```
+
+**Rule:** service owns state and business logic, component is UI-only.
+
 ### Reusable shared component pattern
 
 A component belongs in `shared/components/` when:

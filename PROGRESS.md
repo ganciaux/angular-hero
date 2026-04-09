@@ -9,6 +9,9 @@
 - 004-hero-component
 - 005-hero-interactions
 - 006-hero-child-component
+- 007-hero-output
+- 008-reusable-component
+- 009-hero-service
 
 ## 🧠 Learned Concepts
 
@@ -30,3 +33,7 @@
 - Reusable shared component (`StatBar`) with `input.required()`
 - `shared/components/` for generic UI components with no feature knowledge
 - `xpNextLevel` model field + dynamic level-up progression formula
+- `Injectable` + `providedIn: 'root'` — singleton service
+- `inject()` — new Angular injection API
+- `asReadonly()` — expose signal read-only from service
+- Separation of concerns: service owns state, component owns UI
