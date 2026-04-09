@@ -1,7 +1,7 @@
 @let heroData = hero();
 
-<p>XP: {{ heroData.xp }}</p>
-<p>HP: {{ heroData.hp }}/{{ heroData.maxHp }}</p>
+<app-stat-bar [label]="'HP'" [value]="heroData.hp" [max]="heroData.maxHp"/>
+<app-stat-bar [label]="'XP'" [value]="heroData.xp" [max]="heroData.xpNextLevel"/>
 
 @if (!isAlive()) {
   <p>{{ heroData.name }} has fallen in battle.</p>

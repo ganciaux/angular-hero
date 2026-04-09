@@ -1,9 +1,10 @@
 import { Component, computed, input } from '@angular/core';
 import { HeroModel } from '../hero.model';
+import { StatBar } from '../../../shared/components/stat-bar/stat-bar';
 
 @Component({
   selector: 'app-hero-stats',
-  imports: [],
+  imports: [StatBar],
   templateUrl: './hero-stats.html',
   styleUrl: './hero-stats.scss',
 })

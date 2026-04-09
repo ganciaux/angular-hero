@@ -27,3 +27,6 @@
 - Signal-based `input.required()` for parent → child data flow
 - Signal-based `output<void>()` for child → parent event flow
 - Component responsibility: child emits, parent mutates state
+- Reusable shared component (`StatBar`) with `input.required()`
+- `shared/components/` for generic UI components with no feature knowledge
+- `xpNextLevel` model field + dynamic level-up progression formula

@@ -15,7 +15,8 @@ export class Hero {
     level: 1,
     hp: 100,
     maxHp: 100,
-    xp: 0
+    xp: 0,
+    xpNextLevel: 100
   });
 
   actionLogs = signal<string[]>([]);
@@ -30,7 +31,16 @@ export class Hero {
   }
 
   onGainXP() {
-    this.hero.update(hero => ({...hero, xp: hero.xp + 10}));
+    this.hero.update(hero => {
+      const newXp = hero.xp + 10;
+      const levelUp = newXp >= hero.xpNextLevel;
+      return {
+        ...hero,
+        xp: newXp,
+        level: levelUp ? hero.level + 1 : hero.level,
+        xpNextLevel: levelUp ? Math.floor(hero.xpNextLevel * (1.5+ hero.level/10)) : hero.xpNextLevel,
+      };
+    });
     this.updateLogs('Hero gained 10 XP!');
   }
 

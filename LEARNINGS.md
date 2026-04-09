@@ -154,6 +154,29 @@ Pass from parent template:
 
 Note: pass the signal **value** (`hero()`), not the signal itself (`hero`).
 
+### Reusable shared component pattern
+
+A component belongs in `shared/components/` when:
+- It has no knowledge of any feature (no `HeroModel`, no service)
+- It receives all data via `input()`
+- It can be used in multiple features
+
+```typescript
+// shared/components/stat-bar/stat-bar.ts
+export class StatBar {
+  label = input.required<string>();
+  value = input.required<number>();
+  max = input.required<number>();
+}
+```
+
+```html
+<!-- feature template -->
+<app-stat-bar [label]="'HP'" [value]="hero().hp" [max]="hero().maxHp" />
+```
+
+Pass string literals with `[label]="'HP'"` (not `label="HP"` — that would be a plain HTML attribute, not Angular binding).
+
 ### output() — signal-based child → parent
 
 Angular 17+ alternative to `@Output()` + `EventEmitter`.

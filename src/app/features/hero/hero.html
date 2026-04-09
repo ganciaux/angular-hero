@@ -1,7 +1,9 @@
+@let heroData = hero();
 @let logs = actionLogs();
 
-<app-hero-actions (gainXP)="onGainXP()" (takeDamage)="onTakeDamage()" (heal)="onHeal()"></app-hero-actions>
-<app-hero-stats [hero]="hero()"></app-hero-stats>
+<p>{{ heroData.name }} - Level {{ heroData.level }}</p>
+<app-hero-stats [hero]="hero()"/>
+<app-hero-actions (gainXP)="onGainXP()" (takeDamage)="onTakeDamage()" (heal)="onHeal()"/>
 
 @for (log of logs; track $index) {
   <p>{{ log }}</p>

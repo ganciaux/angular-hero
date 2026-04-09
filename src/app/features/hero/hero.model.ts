@@ -4,5 +4,6 @@ export interface HeroModel{
   hp: number;
   maxHp: number;
   xp: number;
+  xpNextLevel: number;
 }
   
