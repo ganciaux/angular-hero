@@ -154,6 +154,47 @@ Pass from parent template:
 
 Note: pass the signal **value** (`hero()`), not the signal itself (`hero`).
 
+### Template-driven forms
+
+Import `FormsModule` in the component, then use `[(ngModel)]` for two-way binding.
+
+```typescript
+imports: [FormsModule]
+```
+
+```html
+<form (submit)="onSubmit()">
+  <input [(ngModel)]="name" name="name" required />
+  <input type="number" [(ngModel)]="quantity" name="quantity" />
+  <button type="submit">Add</button>
+</form>
+```
+
+`[()]` = "banana in a box" = two-way binding: reads AND writes the variable.
+
+| Approach | Module | Logic in | Best for |
+|---|---|---|---|
+| Template-driven | `FormsModule` | Template | Simple forms |
+| Reactive | `ReactiveFormsModule` | TypeScript | Complex, dynamic forms |
+
+**`type="submit"` vs `type="button"`:**
+
+| | `type="submit"` | `type="button" (click)` |
+|---|---|---|
+| Submit via `Enter` | ✅ | ❌ |
+| Triggers form `(submit)` event | ✅ | ❌ |
+| Angular Forms compatible | ✅ | partial |
+| Usage | primary submit button | secondary buttons (Reset, Cancel) |
+
+Always use `type="submit"` for the main form button.
+
+**Pattern — dumb form component:**
+- Declare local fields for form values
+- Validate in `onSubmit()` before emitting
+- Emit complete object via `output()`
+- Reset fields after emit
+- No service knowledge
+
 ### Smart vs Dumb components
 
 | Type | Role | Example |

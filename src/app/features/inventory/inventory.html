@@ -1,3 +1,5 @@
 @for(item of inventoryService.items(); track item.id) {
   <app-item-card [item]="item" (removed)="inventoryService.removeItem($event)"></app-item-card>
 }
+
+<app-add-item-form (added)="inventoryService.addItem($event)"></app-add-item-form>

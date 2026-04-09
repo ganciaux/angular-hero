@@ -14,6 +14,7 @@
 - 009-hero-service
 - 010-inventory
 - 011-item-component
+- 012-add-item-form
 
 ## 🧠 Learned Concepts
 
@@ -44,4 +45,7 @@
 - `protected readonly` on injected service in component (template access only)
 - Smart vs dumb components pattern
 - `output<string>()` with payload — `$event` receives the emitted value
+- Template-driven forms — `FormsModule`, `ngModel`, two-way binding `[()]`
+- Form validation in component before emitting
+- Dumb form component — emits data, no service knowledge
 - Template Literal Types in TypeScript (`${string}-${string}-...`)
