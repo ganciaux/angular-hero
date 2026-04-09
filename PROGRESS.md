@@ -7,6 +7,7 @@
 - 002-routing-and-layout
 - 003-navigation
 - 004-hero-component
+- 005-hero-interactions
 
 ## 🧠 Learned Concepts
 

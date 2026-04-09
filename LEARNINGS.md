@@ -72,6 +72,67 @@ A component without sub-components does not need its own subfolder.
 
 ---
 
+## ⚡ Signals
+
+### signal() — writable reactive state
+
+```typescript
+hero = signal<HeroModel>({ name: 'Hero', hp: 100, ... });
+
+hero.set({ ...newValue });                        // replace
+hero.update(h => ({ ...h, hp: h.hp - 10 }));     // update from current
+```
+
+Always use spread `{ ...h }` to avoid mutating the object directly.
+
+### computed() — derived state
+
+```typescript
+isAlive = computed(() => this.hero().hp > 0);
+```
+
+Auto-updates when any signal it reads changes. Read-only — cannot be set directly.
+
+### @for — list rendering
+
+```html
+@for (log of logs(); track $index) {
+  <p>{{ log }}</p>
+}
+```
+
+`track` is mandatory. Use `$index` for simple lists, use a unique id for object lists.
+
+### @if — conditional rendering
+
+```html
+@if (isAlive()) {
+  <p>Alive</p>
+} @else {
+  <p>Fallen</p>
+}
+```
+
+### @let — template local variable
+
+```html
+@let heroData = hero();
+```
+
+Avoids calling `hero()` multiple times in the template. Must end with `;`.
+
+### Model naming conflict
+
+With Angular 20 (no `Component` suffix), a component and its model can both want the same name.
+Convention: suffix the interface with `Model` when it conflicts.
+
+```typescript
+export interface HeroModel { ... }  // in hero.model.ts
+export class Hero { ... }           // component in hero.ts
+```
+
+---
+
 ## ⚙️ Angular CLI & Tooling
 
 ### ng generate naming pitfall

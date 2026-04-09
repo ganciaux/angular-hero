@@ -23,6 +23,12 @@
 - Write tests incrementally — never batch all tests at the end
 - Prefer one focused test per new behavior introduced
 
+## 📖 Documentation Rules
+
+Before each mission commit:
+- Update `LEARNINGS.md` with key concepts learned during the mission
+- Update `PROGRESS.md` with the mission and learned concepts
+
 ## 🔍 Code Review Rules
 
 Each review includes:

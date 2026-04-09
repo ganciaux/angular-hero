@@ -1,7 +1,16 @@
 @let heroData = hero();
+@let logs = actionLogs();
 
-@if (isAlive()) {
-  <p>{{ heroData.name }} is alive with {{ heroData.hp }} HP.</p>
-} @else {
+<p>XP: {{ heroData.xp }}</p>
+<p>HP: {{ heroData.hp }}/{{ heroData.maxHp }}</p>
+@if (!isAlive()) {
   <p>{{ heroData.name }} has fallen in battle.</p>
+}
+
+<button (click)="gainXP()" >Gain XP</button>
+<button (click)="takeDamage()" >Take Damage</button>
+<button (click)="heal()" >Heal</button>
+
+@for (log of logs; track $index) {
+  <p>{{ log }}</p>
 }
