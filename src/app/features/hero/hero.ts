@@ -1,10 +1,11 @@
 import { Component, signal } from '@angular/core';
 import { HeroModel } from './hero.model';
 import { HeroStats } from './hero-stats/hero-stats';
+import { HeroActions } from './hero-actions/hero-actions';
 
 @Component({
   selector: 'app-hero',
-  imports: [HeroStats],
+  imports: [HeroStats, HeroActions],
   templateUrl: './hero.html',
   styleUrl: './hero.scss',
 })
@@ -27,17 +28,18 @@ export class Hero {
   updateLogs (log: string) {
     this.actionLogs.update(logs => [...logs, log]);
   }
-  gainXP() {
+
+  onGainXP() {
     this.hero.update(hero => ({...hero, xp: hero.xp + 10}));
     this.updateLogs('Hero gained 10 XP!');
   }
 
-  takeDamage(){
+  onTakeDamage  (){
     this.updateHP(-10);
     this.updateLogs('Hero took -10 damage!');
   }
 
-  heal(){
+  onHeal(){
     const maxHp = this.hero().maxHp;
     this.updateHP(maxHp);
     this.updateLogs(`Hero healed for ${maxHp} HP!`);

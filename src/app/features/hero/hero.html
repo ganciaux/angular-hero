@@ -1,9 +1,6 @@
 @let logs = actionLogs();
 
-<button (click)="gainXP()" >Gain XP</button>
-<button (click)="takeDamage()" >Take Damage</button>
-<button (click)="heal()" >Heal</button>
-
+<app-hero-actions (gainXP)="onGainXP()" (takeDamage)="onTakeDamage()" (heal)="onHeal()"></app-hero-actions>
 <app-hero-stats [hero]="hero()"></app-hero-stats>
 
 @for (log of logs; track $index) {

@@ -25,3 +25,5 @@
 - `signal.update()`, `@for`, event binding `(click)`
 - Component decomposition — extract child component from parent
 - Signal-based `input.required()` for parent → child data flow
+- Signal-based `output<void>()` for child → parent event flow
+- Component responsibility: child emits, parent mutates state

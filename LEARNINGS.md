@@ -154,6 +154,28 @@ Pass from parent template:
 
 Note: pass the signal **value** (`hero()`), not the signal itself (`hero`).
 
+### output() — signal-based child → parent
+
+Angular 17+ alternative to `@Output()` + `EventEmitter`.
+
+```typescript
+// Child component
+gainXP = output<void>();
+takeDamage = output<number>();  // with payload
+
+// Emit directly from template (no intermediate method needed)
+// hero-actions.html
+<button (click)="gainXP.emit()">Gain XP</button>
+```
+
+Listen in parent template:
+```html
+<app-hero-actions (gainXP)="onGainXP()" (takeDamage)="onTakeDamage()" />
+```
+
+**Rule:** child emits events, parent owns state and handles mutations.
+Naming convention: `handle*` in child (if needed), `on*` in parent.
+
 ### computed() in child components
 
 A child component can define its own `computed()` from an `input()` signal:
