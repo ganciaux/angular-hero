@@ -8,6 +8,7 @@
 - 003-navigation
 - 004-hero-component
 - 005-hero-interactions
+- 006-hero-child-component
 
 ## 🧠 Learned Concepts
 
@@ -21,3 +22,6 @@
 - Signals (`signal`, `computed`) for reactive local state
 - `@let` and `@if` template syntax (Angular 17+)
 - Model naming conflict resolution (`HeroModel` vs `Hero` component)
+- `signal.update()`, `@for`, event binding `(click)`
+- Component decomposition — extract child component from parent
+- Signal-based `input.required()` for parent → child data flow

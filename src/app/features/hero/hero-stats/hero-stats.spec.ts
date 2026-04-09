@@ -1,0 +1,23 @@
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+
+import { HeroStats } from './hero-stats';
+
+describe('HeroStats', () => {
+  let component: HeroStats;
+  let fixture: ComponentFixture<HeroStats>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [HeroStats]
+    })
+    .compileComponents();
+
+    fixture = TestBed.createComponent(HeroStats);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});

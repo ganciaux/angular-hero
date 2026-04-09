@@ -1,9 +1,10 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { HeroModel } from './hero.model';
+import { HeroStats } from './hero-stats/hero-stats';
 
 @Component({
   selector: 'app-hero',
-  imports: [],
+  imports: [HeroStats],
   templateUrl: './hero.html',
   styleUrl: './hero.scss',
 })
@@ -15,8 +16,6 @@ export class Hero {
     maxHp: 100,
     xp: 0
   });
-  
-  isAlive = computed(() => this.hero().hp > 0);
 
   actionLogs = signal<string[]>([]);
 

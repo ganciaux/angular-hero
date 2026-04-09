@@ -131,6 +131,40 @@ export interface HeroModel { ... }  // in hero.model.ts
 export class Hero { ... }           // component in hero.ts
 ```
 
+### input() — signal-based parent → child
+
+Angular 17+ alternative to `@Input()` decorator. Integrates natively with signals.
+
+```typescript
+// Child component
+hero = input.required<HeroModel>();   // required input
+name = input<string>('default');      // optional with default
+
+// Read in template
+hero().name
+
+// Read in class
+this.hero().name
+```
+
+Pass from parent template:
+```html
+<app-hero-stats [hero]="hero()" />
+```
+
+Note: pass the signal **value** (`hero()`), not the signal itself (`hero`).
+
+### computed() in child components
+
+A child component can define its own `computed()` from an `input()` signal:
+
+```typescript
+hero = input.required<HeroModel>();
+isAlive = computed(() => this.hero().hp > 0);
+```
+
+This keeps derived logic close to where it's displayed.
+
 ---
 
 ## ⚙️ Angular CLI & Tooling

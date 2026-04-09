@@ -1,15 +1,10 @@
-@let heroData = hero();
 @let logs = actionLogs();
-
-<p>XP: {{ heroData.xp }}</p>
-<p>HP: {{ heroData.hp }}/{{ heroData.maxHp }}</p>
-@if (!isAlive()) {
-  <p>{{ heroData.name }} has fallen in battle.</p>
-}
 
 <button (click)="gainXP()" >Gain XP</button>
 <button (click)="takeDamage()" >Take Damage</button>
 <button (click)="heal()" >Heal</button>
+
+<app-hero-stats [hero]="hero()"></app-hero-stats>
 
 @for (log of logs; track $index) {
   <p>{{ log }}</p>
