@@ -13,6 +13,7 @@
 - 008-reusable-component
 - 009-hero-service
 - 010-inventory
+- 011-item-component
 
 ## 🧠 Learned Concepts
 
@@ -41,4 +42,6 @@
 - `@for` with `track item.id` for object lists
 - `crypto.randomUUID()` for unique ids
 - `protected readonly` on injected service in component (template access only)
+- Smart vs dumb components pattern
+- `output<string>()` with payload — `$event` receives the emitted value
 - Template Literal Types in TypeScript (`${string}-${string}-...`)

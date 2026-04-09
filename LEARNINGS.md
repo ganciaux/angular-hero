@@ -154,6 +154,38 @@ Pass from parent template:
 
 Note: pass the signal **value** (`hero()`), not the signal itself (`hero`).
 
+### Smart vs Dumb components
+
+| Type | Role | Example |
+|---|---|---|
+| Smart | Knows services, manages state | `Inventory` |
+| Dumb | Only `input()` + `output()`, no service | `ItemCard` |
+
+Dumb components are reusable and easy to test — they have no dependencies.
+
+### $event and template variables
+
+**`$event`** — always available in event bindings `()`:
+
+| Source | `$event` contains |
+|---|---|
+| `(click)` DOM | `MouseEvent` |
+| `(input)` DOM | `InputEvent` |
+| `output<string>()` | `string` (emitted value) |
+| `output<ItemModel>()` | `ItemModel` |
+| `output<void>()` | `undefined` |
+
+**`@for` variables:**
+
+| Variable | Description |
+|---|---|
+| `$index` | Current item index |
+| `$first` | True if first item |
+| `$last` | True if last item |
+| `$even` | True if index is even |
+| `$odd` | True if index is odd |
+| `$count` | Total number of items |
+
 ### `protected` vs `readonly` — where to use what
 
 | Location | Pattern | Why |

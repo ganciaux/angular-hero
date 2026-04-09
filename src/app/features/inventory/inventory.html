@@ -1,3 +1,3 @@
 @for(item of inventoryService.items(); track item.id) {
-  <p>{{ item.name }} ({{ item.quantity }}) <button (click)="inventoryService.removeItem(item.id)">Remove</button></p>
+  <app-item-card [item]="item" (removed)="inventoryService.removeItem($event)"></app-item-card>
 }
