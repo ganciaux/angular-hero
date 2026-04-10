@@ -17,6 +17,7 @@
 - 012-add-item-form
 - 013-equip-unequip
 - 014-pipes
+- SQ-01-journal
 
 ## 🧠 Learned Concepts
 
@@ -59,3 +60,9 @@
 - Standalone pipe — imported directly in component `imports: []`
 - Pure pipes — only re-run when input value changes (performant by default)
 - Private helper method in pipe vs injecting another pipe — keep it simple
+- `effect()` — runs automatically when a signal it reads changes, must be in injection context (constructor)
+- Service observing another service — inject read-only, use `effect()` to listen (Open/Closed principle)
+- `previousHero` pattern — store previous state to detect what changed between two signal emissions
+- Two `effect()` in one constructor — one per signal source, each with clear responsibility
+- `@empty` block in `@for` — renders when the list is empty
+- Array truthy check — empty array `[]` is truthy in JS, `if (arr)` never protects against empty

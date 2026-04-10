@@ -1,0 +1,5 @@
+@for (entries of journalService.entries(); track entries.id) {
+  <div class="date">{{ entries.date | date: 'short' }} : {{ entries.type }} : {{ entries.content }} </div>
+}@empty{
+  <p>No journal entries yet.</p>
+}

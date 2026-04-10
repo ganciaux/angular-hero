@@ -405,6 +405,100 @@ No need to inject `TitleCasePipe` inside another pipe — that's over-engineerin
 
 ---
 
+## 🔔 effect()
+
+### What it is
+
+`effect()` runs a side effect automatically whenever a signal it reads changes.
+It must be called in an **injection context** (constructor, or with `injector`).
+
+```typescript
+constructor() {
+  effect(() => {
+    const hero = this.heroService.hero(); // subscribes to this signal
+    console.log('Hero changed:', hero);
+  });
+}
+```
+
+### Service observing another service
+
+A service can inject another service and listen to its signals via `effect()` — without the observed service knowing it exists.
+
+```typescript
+@Injectable({ providedIn: 'root' })
+export class JournalService {
+  private heroService = inject(HeroService);
+
+  constructor() {
+    effect(() => {
+      const hero = this.heroService.hero(); // read-only
+      // log changes without touching HeroService
+    });
+  }
+}
+```
+
+This respects the **Open/Closed principle**: `HeroService` is closed to modification, open to observation.
+
+### previousState pattern
+
+To detect *what* changed between two emissions, store the previous state:
+
+```typescript
+private previousHero: HeroModel | null = null;
+
+constructor() {
+  effect(() => {
+    const current = this.heroService.hero();
+
+    if (this.previousHero) {
+      if (current.xp > this.previousHero.xp) { /* XP gained */ }
+      if (current.hp < this.previousHero.hp) { /* HP lost */ }
+      if (current.level > this.previousHero.level) { /* Level up */ }
+    }
+
+    this.previousHero = current;
+  });
+}
+```
+
+First call: `previousHero` is null → skip comparisons → store initial state.
+Subsequent calls: compare and log.
+
+### Multiple effect() in one constructor
+
+One `effect()` per signal source — cleaner, single responsibility:
+
+```typescript
+constructor() {
+  effect(() => this._heroEffect());
+  effect(() => this._itemEffect());
+}
+```
+
+### @empty in @for
+
+```html
+@for (entry of entries(); track entry.id) {
+  <div>{{ entry.content }}</div>
+} @empty {
+  <p>No entries yet.</p>
+}
+```
+
+Renders the `@empty` block when the list is empty — no `@if` needed.
+
+### JS truthy trap — empty array
+
+```typescript
+if ([]) { } // always true — [] is truthy in JS
+```
+
+Never use `if (arr)` to check for an empty array. Use `if (arr.length > 0)` instead.
+
+---
+
 ## ⚙️ Angular CLI & Tooling
 
 ### ng generate naming pitfall
