@@ -10,4 +10,5 @@ import { ItemModel } from '../inventory.model';
 export class ItemCard {
   readonly item = input.required<ItemModel>();
   removed = output<string>();
+  equipped = output<string>();
 }

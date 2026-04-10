@@ -6,9 +6,9 @@ import { ItemModel } from './inventory.model';
 })
 export class InventoryService {
   private _items = signal<ItemModel[]>([
-    { id: crypto.randomUUID(), name: 'item 1', type: 'divers', quantity: 1 },
-    { id: crypto.randomUUID(), name: 'item 2', type: 'potion', quantity: 2 },
-    { id: crypto.randomUUID(), name: 'item 3', type: 'sword', quantity: 2 },
+    { id: crypto.randomUUID(), name: 'item 1', type: 'divers', quantity: 1, equipped: false },
+    { id: crypto.randomUUID(), name: 'item 2', type: 'potion', quantity: 2, equipped: false },
+    { id: crypto.randomUUID(), name: 'item 3', type: 'sword', quantity: 2, equipped: false },
   ]);
 
   readonly items = this._items.asReadonly();
@@ -23,5 +23,14 @@ export class InventoryService {
 
   findItemById(id: string): ItemModel | undefined {
     return this._items().find(item => item.id === id);
+  }
+
+  toggleEquip(id: string) {
+    this._items.update(items => items.map(item => {
+      if (item.id === id) {
+        return { ...item, equipped: !item.equipped };
+      }
+      return item;
+    }));
   }
 }
