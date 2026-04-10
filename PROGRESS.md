@@ -16,6 +16,7 @@
 - 011-item-component
 - 012-add-item-form
 - 013-equip-unequip
+- 014-pipes
 
 ## 🧠 Learned Concepts
 
@@ -54,3 +55,7 @@
 - `output<string>()` named `equipped` — child emits id, parent calls `toggleEquip`
 - Immutable signal array update with `.map()` + spread operator
 - `@if` in template for conditional button label
+- Pipes — built-in (`titlecase`, `uppercase`) and custom (`@Pipe`, `PipeTransform`, `transform()`)
+- Standalone pipe — imported directly in component `imports: []`
+- Pure pipes — only re-run when input value changes (performant by default)
+- Private helper method in pipe vs injecting another pipe — keep it simple

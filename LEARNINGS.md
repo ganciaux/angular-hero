@@ -347,6 +347,64 @@ This keeps derived logic close to where it's displayed.
 
 ---
 
+## 🔧 Pipes
+
+### Built-in pipes
+
+```html
+{{ item.name | titlecase }}       <!-- Hello World -->
+{{ item.name | uppercase }}       <!-- HELLO WORLD -->
+{{ item.name | lowercase }}       <!-- hello world -->
+{{ price | currency:'EUR' }}      <!-- €9.99 -->
+{{ count | number:'1.0-2' }}      <!-- 3.14 -->
+{{ obj | json }}                  <!-- debug output -->
+{{ items | slice:0:3 }}           <!-- first 3 items -->
+```
+
+Import from `@angular/common` and add to component `imports: []`.
+
+### Custom pipe
+
+```typescript
+import { Pipe, PipeTransform } from '@angular/core';
+
+@Pipe({ name: 'itemType', standalone: true })
+export class ItemTypePipe implements PipeTransform {
+  transform(type: string): string {
+    if (type === 'sword') return '⚔️ Sword';
+    if (type === 'potion') return '🧪 Potion';
+    return '📦 ' + type.charAt(0).toUpperCase() + type.slice(1);
+  }
+}
+```
+
+Import in the component that uses it:
+```typescript
+imports: [ItemTypePipe]
+```
+
+Use in template:
+```html
+{{ item.type | itemType }}
+```
+
+### Pure pipes (default)
+
+Pipes are **pure** by default — Angular only re-runs `transform()` when the input reference changes.
+This makes them very performant. Avoid `pure: false` unless necessary.
+
+### Pipe vs private method
+
+For simple string formatting inside a pipe, a private method is fine:
+```typescript
+private titlecase(str: string): string {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+```
+No need to inject `TitleCasePipe` inside another pipe — that's over-engineering for a simple fallback.
+
+---
+
 ## ⚙️ Angular CLI & Tooling
 
 ### ng generate naming pitfall
