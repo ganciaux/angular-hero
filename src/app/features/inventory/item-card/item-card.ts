@@ -1,9 +1,11 @@
 import { Component, input, output } from '@angular/core';
 import { ItemModel } from '../inventory.model';
+import { ItemTypePipe } from '../pipes/item-type/item-type.pipe';
+import { TitleCasePipe, UpperCasePipe } from '@angular/common';
 
 @Component({
   selector: 'app-item-card',
-  imports: [],
+  imports: [ItemTypePipe, TitleCasePipe, UpperCasePipe],
   templateUrl: './item-card.html',
   styleUrl: './item-card.scss',
 })

@@ -1,4 +1,4 @@
 <p [class.equipped]="item().equipped">
-  {{ item().name }} ({{ item().quantity }}) <button (click)="removed.emit(item().id)">Remove</button>
-  <button (click)="equipped.emit(item().id)"> @if (item().equipped) { Unequip } @else { Equip } </button>
+  {{ item().name | titlecase }} {{ item().type | itemType }} ({{ item().quantity }}) <button (click)="removed.emit(item().id)">Remove</button>
+  <button (click)="equipped.emit(item().id)"> @if (item().equipped) { {{ 'Unequip' | uppercase }} } @else { {{ 'Equip' | uppercase }} } </button>
 </p>

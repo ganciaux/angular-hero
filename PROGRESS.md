@@ -15,6 +15,7 @@
 - 010-inventory
 - 011-item-component
 - 012-add-item-form
+- 013-equip-unequip
 
 ## 🧠 Learned Concepts
 
@@ -49,3 +50,7 @@
 - Form validation in component before emitting
 - Dumb form component — emits data, no service knowledge
 - Template Literal Types in TypeScript (`${string}-${string}-...`)
+- Dynamic CSS class binding — `[class.equipped]="condition"` (single class toggle)
+- `output<string>()` named `equipped` — child emits id, parent calls `toggleEquip`
+- Immutable signal array update with `.map()` + spread operator
+- `@if` in template for conditional button label
