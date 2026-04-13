@@ -18,6 +18,7 @@
 - 013-equip-unequip
 - 014-pipes
 - SQ-01-journal
+- SQ-02-taverne
 
 ## 🧠 Learned Concepts
 
@@ -66,3 +67,9 @@
 - Two `effect()` in one constructor — one per signal source, each with clear responsibility
 - `@empty` block in `@for` — renders when the list is empty
 - Array truthy check — empty array `[]` is truthy in JS, `if (arr)` never protects against empty
+- `computed()` for reactive filter + sort — single source of truth, no manual refresh
+- Deselect on filter change — check filtered list still contains selected item, reset if not
+- `signal<T | null>(null)` in smart component + `input.required<T>()` in dumb — parent guards with `@if`, child stays clean
+- `output<string>()` — keep output type minimal, don't add `| null` if never emitted
+- `@if` without `@else` — valid when no fallback needed
+- Type union in model (`'warrior' | 'magician' | 'elf'`) — must match select option values exactly

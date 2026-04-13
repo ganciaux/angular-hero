@@ -499,6 +499,73 @@ Never use `if (arr)` to check for an empty array. Use `if (arr.length > 0)` inst
 
 ---
 
+## 🔍 Reactive Filter & Sort with computed()
+
+### Pattern
+
+Use private signals for filter criteria + one `computed()` that derives the filtered/sorted list:
+
+```typescript
+private name = signal('');
+private type = signal('all');
+private sortAsc = signal(true);
+
+readonly adventurers = computed(() => {
+  const list = this._items().filter(item => {
+    const matchName = item.name.includes(this.name());
+    const matchType = this.type() === 'all' || item.type === this.type();
+    return matchName && matchType;
+  });
+  return list.sort((a, b) =>
+    this.sortAsc() ? a.level - b.level : b.level - a.level
+  );
+});
+
+filter(criteria: { name: string; type: string; sortAsc: boolean }) {
+  this.name.set(criteria.name);
+  this.type.set(criteria.type);
+  this.sortAsc.set(criteria.sortAsc);
+}
+```
+
+- No "Search" button needed — `computed()` re-runs automatically when any signal changes
+- `computed()` is synchronous — the filtered list is immediately available after `filter()` is called
+
+### Deselect on filter change
+
+When the selected item may no longer be in the filtered list, reset it:
+
+```typescript
+formChange() {
+  this.service.filter({ ... });
+  if (this.selected()) {
+    const stillVisible = this.service.items().find(i => i.id === this.selected()!.id);
+    if (!stillVisible) this.selected.set(null);
+  }
+}
+```
+
+### Smart/dumb with nullable selection
+
+- Smart component: `selected = signal<ItemModel | null>(null)`
+- Template: `@if (selected()) { <app-card [item]="selected()!"> }`
+- Dumb card: `item = input.required<ItemModel>()` — no null handling needed
+
+The `!` (non-null assertion) in the template is safe here because `@if` already guards.
+
+### Type union must match option values
+
+```typescript
+// model
+type: 'warrior' | 'magician' | 'elf'
+
+// template — values must match exactly
+<option value="magician">magician</option>  // ✅
+<option value="magical">magical</option>    // ❌ never matches
+```
+
+---
+
 ## ⚙️ Angular CLI & Tooling
 
 ### ng generate naming pitfall
