@@ -1,0 +1,22 @@
+<form>
+  <div>Name: <input name="name" type="text" [(ngModel)]="name" id="name" (change)="formChange()"/></div>
+  <div>classe: 
+    <select name="type" [(ngModel)]="type" id="type" (change)="formChange()">
+      <option value="all" selected>all</option>
+      <option value="magician">magician</option>
+      <option value="elf">elf</option>
+      <option value="warrior">warrior</option>
+    </select>
+  </div>
+  <div>sort:
+    <select name="sortAsc" [(ngModel)]="sortAsc" id="sortAsc" (change)="formChange()">
+      <option value="asc" selected>asc</option>
+      <option value="desc">desc</option>
+    </select>
+  </div>
+</form>
+<app-adventurer-list [adventurers]="taverneService.adventurers()" (selectedAdventurerId)="onSelectAdventurer($event)"></app-adventurer-list>
+
+@if(selectedAdventurer()){
+  <app-adventurer-card [adventurer]="selectedAdventurer()!"></app-adventurer-card>
+}

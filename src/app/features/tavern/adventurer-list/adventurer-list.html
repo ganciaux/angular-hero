@@ -1,0 +1,8 @@
+@for(adv of adventurers();track adv.id ){
+  <p>
+    {{adv.name}} - {{adv.type}} - {{adv.level}} <button type="button" (click)="selectAdventurer(adv.id)">Stats</button>
+  </p>
+} @empty {
+  <p>No adventurer !<p>
+}
+
