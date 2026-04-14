@@ -19,6 +19,7 @@
 - 014-pipes
 - SQ-01-journal
 - SQ-02-taverne
+- SQ-03-coffre
 
 ## 🧠 Learned Concepts
 
@@ -73,3 +74,7 @@
 - `output<string>()` — keep output type minimal, don't add `| null` if never emitted
 - `@if` without `@else` — valid when no fallback needed
 - Type union in model (`'warrior' | 'magician' | 'elf'`) — must match select option values exactly
+- Interface inheritance — `ChestItemModel extends ItemModel` adds fields without modifying the base interface
+- `signal` vs `computed()` for random draw — random generation is an action, not a derivation
+- `[...array].sort()` — spread before sort to avoid mutating the signal's internal array
+- `output()` opt-in — unlistened outputs in parent are silently ignored by Angular, no error

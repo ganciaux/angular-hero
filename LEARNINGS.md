@@ -566,6 +566,89 @@ type: 'warrior' | 'magician' | 'elf'
 
 ---
 
+## 🎲 Random Draw — signal vs computed()
+
+### When NOT to use computed()
+
+`computed()` derives a value from existing signal state — it re-runs when its dependencies change.
+A random draw has **no upstream state that changes** — it's an action triggered by user input.
+
+```typescript
+// ❌ computed() — wrong: no signal to react to, result would be frozen
+readonly chestItems = computed(() => this.pickRandomItems(3)); // only runs once
+
+// ✅ signal + method — correct: explicit action mutates state
+private _chestItems = signal<ChestItemModel[]>([]);
+readonly chestItems = this._chestItems.asReadonly();
+
+pickRandomItems(n: number) {
+  const shuffled = [...this.items()].sort(() => 0.5 - Math.random());
+  this._chestItems.set(shuffled.slice(0, n));
+}
+```
+
+Mental model: **computed = derivation (what is it?), signal + method = action (do something).**
+
+### Spread before sort — avoid mutating signal array
+
+`.sort()` sorts **in place** — it mutates the original array.
+If `this.items()` returns the signal's internal array, sorting it would corrupt the signal's state.
+
+```typescript
+// ❌ mutates signal internal array
+this.items().sort(() => 0.5 - Math.random());
+
+// ✅ spread first — works on a copy
+[...this.items()].sort(() => 0.5 - Math.random());
+```
+
+---
+
+## 🧬 Interface Inheritance
+
+### extends — add fields without modifying the base
+
+`ChestItemModel` needs all fields from `ItemModel` plus a `description`.
+Use `extends` to inherit — the base interface stays unchanged (Open/Closed).
+
+```typescript
+// inventory.model.ts
+export interface ItemModel {
+  id: string;
+  name: string;
+  type: string;
+  quantity: number;
+  equipped: boolean;
+}
+
+// chest.model.ts
+import { ItemModel } from '../inventory/inventory.model';
+
+export interface ChestItemModel extends ItemModel {
+  description: string; // adds one field
+}
+```
+
+`ChestItemModel` has all 5 fields from `ItemModel` + `description`.
+Since `ChestItemModel extends ItemModel`, anywhere `ItemModel` is expected you can pass a `ChestItemModel`.
+
+This allows reusing `ItemCard` (which expects `ItemModel`) in the chest template without modification.
+
+### output() opt-in — unlistened outputs are silently ignored
+
+`ItemCard` declares `removed` and `equipped` outputs.
+In the chest context, the parent doesn't bind them — Angular does not throw an error.
+Outputs are opt-in: the parent decides whether to listen.
+
+```html
+<!-- ✅ valid — chest only uses [item], ignores removed/equipped outputs -->
+<app-item-card [item]="item"></app-item-card>
+```
+
+This makes dumb components safe to reuse in contexts that only need a subset of their features.
+
+---
+
 ## ⚙️ Angular CLI & Tooling
 
 ### ng generate naming pitfall
