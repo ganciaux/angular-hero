@@ -1,0 +1,8 @@
+<h2>Items</h2>
+
+@for(item of chestService.chestItems(); track item.id) {
+  <app-item-card [item]="item"></app-item-card>
+  <p>{{ item.description }}</p>
+}
+
+<button (click)="chestService.pickRandomItems(3)">Open New Chest</button>
