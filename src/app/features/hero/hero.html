@@ -2,9 +2,29 @@
 @let logs = heroService.actionLogs();
 
 <p>{{ heroData.name }} - Level {{ heroData.level }}</p>
-<app-hero-stats [hero]="heroData"/>
+<p>
+  <input id="heroInput" #heroInput />
+  <button (click)="log(heroInput.value)">Print</button>
+  <button (click)="statBar.flash()">Flash</button>
+  <button (click)="statBarIf.flash()">Flash (if)</button>
+</p>
+<div #heroDiv class="hero-div">Something</div>
+
+<app-hero-stats #statBar [hero]="heroData"/>
+
+@if(showStats){
+  <app-hero-stats #statBarIf [hero]="heroData"/>
+} @else {
+  <app-hero-stats #statBarElse [hero]="heroData"/>
+}
+
 <app-hero-actions (gainXP)="heroService.onGainXP()" (takeDamage)="heroService.onTakeDamage()" (heal)="heroService.onHeal()"/>
 
+@if(logs.length>0){
+  <p #logLength>{{logs.length}}</p>
+  <button (click)="log(logLength.getHTML())">Log Length</button>
+
+}
 @for (log of logs; track $index) {
   <p>{{ log }}</p>
 }

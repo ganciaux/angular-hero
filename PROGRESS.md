@@ -20,6 +20,8 @@
 - SQ-01-journal
 - SQ-02-taverne
 - SQ-03-coffre
+- 015-template-references
+- 015-template-references-ex
 
 ## 🧠 Learned Concepts
 
@@ -78,3 +80,7 @@
 - `signal` vs `computed()` for random draw — random generation is an action, not a derivation
 - `[...array].sort()` — spread before sort to avoid mutating the signal's internal array
 - `output()` opt-in — unlistened outputs in parent are silently ignored by Angular, no error
+- Template references (`#ref`) — access DOM element or child component instance directly in the template
+- `#ref` scope — a reference is only accessible within the `@if`/`@for` block where it is declared
+- Child component method via `#ref` must be `public` — `protected`/`private` causes a compile error
+

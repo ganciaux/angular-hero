@@ -13,4 +13,7 @@ export class HeroStats {
 
   isAlive = computed(() => this.hero().hp > 0);
 
+  flash() {
+    console.log('flash!')
+  }
 }

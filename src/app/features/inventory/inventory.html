@@ -1,3 +1,5 @@
+<input #searchInput type="text" id="searchInput" placeholder="Search item"/>
+<button (click)="searchInput.focus()">Focus Search</button>
 @for(item of inventoryService.items(); track item.id) {
   <app-item-card [item]="item" (removed)="inventoryService.removeItem($event)" (equipped)="inventoryService.toggleEquip($event)"></app-item-card>
 }

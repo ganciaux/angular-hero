@@ -649,6 +649,46 @@ This makes dumb components safe to reuse in contexts that only need a subset of 
 
 ---
 
+## 🔗 Template References (#ref)
+
+### Reference on a native DOM element
+
+Add `#ref` on any HTML element to access it directly in the template — no `ngModel`, no signal, no component property needed.
+
+```html
+<input #heroInput />
+<button (click)="log(heroInput.value)">Print</button>
+```
+
+`heroInput` is an `HTMLInputElement` — you can access `.value`, `.focus()`, etc. directly.
+
+### Reference on a child component
+
+Add `#ref` on a component selector to access its **instance** and call its public methods:
+
+```html
+<app-hero-stats #statBar [hero]="heroData" />
+<button (click)="statBar.flash()">Flash</button>
+```
+
+The referenced method must be `public` — `protected` or `private` will cause a compile error.
+
+### Scope — references are block-scoped
+
+A `#ref` is only accessible within the structural block where it is declared (`@if`, `@for`, etc.).
+
+```html
+@if (condition) {
+  <p #myRef>...</p>
+  <button (click)="log(myRef.textContent)">OK</button>  <!-- ✅ inside the block -->
+}
+<button (click)="log(myRef.textContent)">KO</button>  <!-- ❌ compile error — myRef out of scope -->
+```
+
+If you need access from TypeScript (not just the template), use `ViewChild` instead.
+
+---
+
 ## ⚙️ Angular CLI & Tooling
 
 ### ng generate naming pitfall
