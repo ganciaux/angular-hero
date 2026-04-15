@@ -566,6 +566,63 @@ type: 'warrior' | 'magician' | 'elf'
 
 ---
 
+## 🔍 Template References & ViewChild
+
+### Template reference (`#ref`) — accès direct dans le template
+
+```html
+<input #searchInput type="text" />
+<button (click)="searchInput.focus()">Focus</button>
+
+<app-hero-stats #statBar [hero]="heroData" />
+<button (click)="statBar.flash()">Flash</button>
+```
+
+- Sur un élément DOM → accès aux propriétés DOM (`value`, `focus()`, `textContent`...)
+- Sur un composant → accès à l'instance du composant (ses méthodes publiques)
+- Portée limitée au bloc où la ref est déclarée — une ref dans un `@if` n'est pas accessible en dehors
+
+### ViewChild — accès depuis le TypeScript
+
+```typescript
+// Élément DOM natif → ElementRef
+@ViewChild("heroDiv") heroDiv!: ElementRef<HTMLDivElement>;
+
+// Composant Angular → type du composant
+@ViewChild("statBar") statBar!: HeroStats;
+
+ngAfterViewInit() {
+  this.heroDiv.nativeElement.textContent = 'Updated!';
+  this.statBar.flash();
+}
+```
+
+Règle : `ElementRef` pour les éléments DOM, type du composant pour les composants Angular.
+Ne jamais appeler `nativeElement` sur un composant — ça n'expose pas ses méthodes.
+
+### Cycle de vie — quand ViewChild est disponible
+
+```
+constructor()      → pas de DOM
+ngOnInit()         → DOM absent (sauf static: true sur élément toujours présent)
+ngAfterViewInit()  → DOM disponible ✅
+```
+
+### static: true vs static: false
+
+| | `static: false` (défaut) | `static: true` |
+|---|---|---|
+| Résolu | après le rendu | avant le rendu |
+| Disponible dans `ngOnInit` | ❌ | ✅ (si hors `@if`) |
+| Disponible dans `ngAfterViewInit` | ✅ | ✅ |
+| Dans un `@if` | ✅ (`undefined` si condition false) | ❌ toujours `undefined` |
+
+`static: true` + `@if` = toujours `undefined` — Angular ne peut pas résoudre un élément conditionnel statiquement.
+
+**Règle pratique :** utilise toujours `static: false` (défaut). Ne mets `static: true` que si tu as besoin de l'élément dans `ngOnInit` ET qu'il est toujours présent dans le template.
+
+---
+
 ## 🎲 Random Draw — signal vs computed()
 
 ### When NOT to use computed()

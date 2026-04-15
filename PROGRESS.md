@@ -21,6 +21,8 @@
 - SQ-02-taverne
 - SQ-03-coffre
 - 015-template-references
+- 016-viewchild
+- 015-template-references
 - 015-template-references-ex
 
 ## 🧠 Learned Concepts
@@ -80,6 +82,12 @@
 - `signal` vs `computed()` for random draw — random generation is an action, not a derivation
 - `[...array].sort()` — spread before sort to avoid mutating the signal's internal array
 - `output()` opt-in — unlistened outputs in parent are silently ignored by Angular, no error
+- Template references (`#ref`) — direct access to DOM element or component instance from the template
+- `ViewChild` — access DOM element or component instance from TypeScript
+- `ElementRef` vs component type — `ElementRef` for DOM elements, component class for Angular components
+- `ngAfterViewInit` — correct lifecycle hook to interact with the view (DOM exists here)
+- `static: true` vs `static: false` — static resolves before render (ngOnInit), dynamic resolves after (ngAfterViewInit)
+- `static: true` + `@if` = always `undefined` — Angular can't resolve a conditional element statically
 - Template references (`#ref`) — access DOM element or child component instance directly in the template
 - `#ref` scope — a reference is only accessible within the `@if`/`@for` block where it is declared
 - Child component method via `#ref` must be `public` — `protected`/`private` causes a compile error
