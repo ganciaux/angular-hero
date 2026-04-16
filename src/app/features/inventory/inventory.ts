@@ -2,10 +2,11 @@ import { AfterViewInit, Component, ElementRef, inject, ViewChild } from '@angula
 import { InventoryService } from './inventory.service';
 import { ItemCard } from './item-card/item-card';
 import { AddItemForm } from './add-item-form/add-item-form';
+import { Panel } from "../../shared/components/panel/panel";
 
 @Component({
   selector: 'app-inventory',
-  imports: [ItemCard, AddItemForm],
+  imports: [ItemCard, AddItemForm, Panel],
   templateUrl: './inventory.html',
   styleUrl: './inventory.scss',
 })

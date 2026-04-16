@@ -2,10 +2,11 @@ import { AfterViewInit, Component, ElementRef, inject, OnInit, ViewChild } from 
 import { HeroStats } from './hero-stats/hero-stats';
 import { HeroActions } from './hero-actions/hero-actions';
 import { HeroService } from './hero.service';
+import { Panel } from '../../shared/components/panel/panel';
 
 @Component({
   selector: 'app-hero',
-  imports: [HeroStats, HeroActions],
+  imports: [HeroStats, HeroActions, Panel],
   templateUrl: './hero.html',
   styleUrl: './hero.scss',
 })

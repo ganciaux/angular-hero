@@ -1,7 +1,14 @@
 <input #searchInput type="text" id="searchInput" placeholder="Search item"/>
 <button (click)="searchInput.focus()">Focus Search</button>
-@for(item of inventoryService.items(); track item.id) {
-  <app-item-card [item]="item" (removed)="inventoryService.removeItem($event)" (equipped)="inventoryService.toggleEquip($event)"></app-item-card>
-}
+
+<app-panel>
+  <h3 panel-title>Inventory</h3>
+  <div panel-body>
+    @for(item of inventoryService.items(); track item.id) {
+      <app-item-card [item]="item" (removed)="inventoryService.removeItem($event)" (equipped)="inventoryService.toggleEquip($event)"></app-item-card>
+    }
+  </div>
+</app-panel>
+
 
 <app-add-item-form (added)="inventoryService.addItem($event)"></app-add-item-form>

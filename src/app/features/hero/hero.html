@@ -10,7 +10,20 @@
 </p>
 <div #heroDiv class="hero-div">Something</div>
 
-<app-hero-stats #statBar [hero]="heroData"/>
+<app-panel>
+  <p>Ce contenu est défini par le parent.</p>
+</app-panel>
+
+<app-panel>
+  <h3 panel-title>Mon Héros</h3>
+  <p panel-body>Contenu du panneau.</p>
+</app-panel>
+
+<app-panel>
+  <div panel-body>
+    <app-hero-stats #statBar [hero]="heroData"/>
+  </div>
+</app-panel>
 
 @if(showStats){
   <app-hero-stats #statBarIf [hero]="heroData"/>
@@ -23,8 +36,8 @@
 @if(logs.length>0){
   <p #logLength>{{logs.length}}</p>
   <button (click)="log(logLength.getHTML())">Log Length</button>
-
 }
+
 @for (log of logs; track $index) {
   <p>{{ log }}</p>
 }
