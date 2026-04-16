@@ -41,3 +41,9 @@
 @for (log of logs; track $index) {
   <p>{{ log }}</p>
 }
+
+<button (click)="heroModal.open()">Ouvrir Modal</button>
+<app-modal #heroModal>
+  <h2 modal-header>Détails du Héros</h2>
+  <p modal-body>Contenu de la modal.</p>
+</app-modal>

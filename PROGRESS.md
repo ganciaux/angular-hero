@@ -22,6 +22,8 @@
 - SQ-03-coffre
 - 015-template-references
 - 016-viewchild
+- 017-ng-content
+- 018-modal
 - 015-template-references
 - 015-template-references-ex
 
@@ -88,6 +90,11 @@
 - `ngAfterViewInit` — correct lifecycle hook to interact with the view (DOM exists here)
 - `static: true` vs `static: false` — static resolves before render (ngOnInit), dynamic resolves after (ngAfterViewInit)
 - `static: true` + `@if` = always `undefined` — Angular can't resolve a conditional element statically
+- `ng-content` — content projection, parent decides what to display inside a child component
+- Named content projection — `select="[panel-title]"` targets elements with matching attributes
+- Fallback `<ng-content>` — catches content not matched by any named slot
+- `ng-content` + `signal` + `ViewChild` combined — reusable Modal component pattern
+- `@ViewChild(ComponentType)` — target by class type instead of string ref, more robust
 - Template references (`#ref`) — access DOM element or child component instance directly in the template
 - `#ref` scope — a reference is only accessible within the `@if`/`@for` block where it is declared
 - Child component method via `#ref` must be `public` — `protected`/`private` causes a compile error

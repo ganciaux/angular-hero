@@ -3,6 +3,7 @@
 
 <app-panel>
   <h3 panel-title>Inventory</h3>
+  <button (click)="openModal()">Open Inventory Modal</button>
   <div panel-body>
     @for(item of inventoryService.items(); track item.id) {
       <app-item-card [item]="item" (removed)="inventoryService.removeItem($event)" (equipped)="inventoryService.toggleEquip($event)"></app-item-card>
@@ -12,3 +13,8 @@
 
 
 <app-add-item-form (added)="inventoryService.addItem($event)"></app-add-item-form>
+
+<app-modal>
+  <h2 modal-header>Inventory Modal Header</h2>
+  <p modal-body>Inventory Modal Body</p>
+</app-modal>

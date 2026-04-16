@@ -623,6 +623,82 @@ ngAfterViewInit()  → DOM disponible ✅
 
 ---
 
+## 📦 Content Projection — ng-content
+
+### Principe
+
+`ng-content` permet à un composant d'être une "coquille" — il définit la structure, le parent décide du contenu.
+Le composant ne sait pas ce qu'il affiche. C'est ce qui le rend vraiment réutilisable.
+
+```typescript
+// panel.ts — aucun input(), aucune logique
+@Component({ selector: 'app-panel', ... })
+export class Panel {}
+```
+
+```html
+<!-- panel.html -->
+<div class="panel">
+  <ng-content></ng-content>
+</div>
+
+<!-- parent.html — le parent injecte ce qu'il veut -->
+<app-panel>
+  <p>N'importe quel contenu ici.</p>
+</app-panel>
+```
+
+### Projection nommée — plusieurs zones avec select
+
+Quand on veut des zones distinctes (titre, corps...), on utilise `select` :
+
+```html
+<!-- panel.html -->
+<div class="panel">
+  <div class="panel-header">
+    <ng-content select="[panel-title]"></ng-content>
+  </div>
+  <div class="panel-body">
+    <ng-content select="[panel-body]"></ng-content>
+  </div>
+  <ng-content></ng-content> <!-- contenu sans attribut -->
+</div>
+
+<!-- parent.html -->
+<app-panel>
+  <h3 panel-title>Titre</h3>
+  <p panel-body>Corps du panneau.</p>
+  <p>Contenu libre (capturé par ng-content générique).</p>
+</app-panel>
+```
+
+`select` accepte n'importe quel sélecteur CSS : attribut `[panel-title]`, classe `.title`, balise `h3`...
+
+### @ViewChild par type vs par string
+
+```typescript
+// Par string — fonctionne, mais fragile si la ref change dans le template
+@ViewChild('Modal') modal!: Modal;
+
+// Par type — plus robuste, pas besoin de #ref dans le template
+@ViewChild(Modal) modal!: Modal;
+```
+
+Préférer `@ViewChild(ComponentType)` quand on cible un composant Angular.
+Garder `@ViewChild('ref')` pour les éléments DOM natifs (`ElementRef`).
+
+### Règle clé
+
+Un composant avec `ng-content` ne modifie pas le contenu projeté — il lui fournit juste un emplacement.
+Le même composant peut accueillir des contenus radicalement différents selon le contexte d'utilisation.
+
+| Approche | Quand l'utiliser |
+|---|---|
+| `input()` | Le composant contrôle comment afficher la donnée |
+| `ng-content` | Le parent contrôle entièrement ce qui s'affiche |
+
+---
+
 ## 🎲 Random Draw — signal vs computed()
 
 ### When NOT to use computed()

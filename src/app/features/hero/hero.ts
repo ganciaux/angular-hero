@@ -3,10 +3,11 @@ import { HeroStats } from './hero-stats/hero-stats';
 import { HeroActions } from './hero-actions/hero-actions';
 import { HeroService } from './hero.service';
 import { Panel } from '../../shared/components/panel/panel';
+import { Modal } from '../../shared/components/modal/modal';
 
 @Component({
   selector: 'app-hero',
-  imports: [HeroStats, HeroActions, Panel],
+  imports: [HeroStats, HeroActions, Panel, Modal],
   templateUrl: './hero.html',
   styleUrl: './hero.scss',
 })
