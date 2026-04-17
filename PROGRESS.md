@@ -26,6 +26,7 @@
 - 018-modal
 - 015-template-references
 - 015-template-references-ex
+- SQ-04-galerie
 
 ## 🧠 Learned Concepts
 
@@ -98,4 +99,7 @@
 - Template references (`#ref`) — access DOM element or child component instance directly in the template
 - `#ref` scope — a reference is only accessible within the `@if`/`@for` block where it is declared
 - Child component method via `#ref` must be `public` — `protected`/`private` causes a compile error
+- `@let l = signal(); @if(l)` — type narrowing without `?.` in template
+- `input<T | null>(null)` instead of `input.required<T>()` when content is projected via `ng-content` and the parent can't guarantee a non-null value at all times
+- Static data files belong in the feature folder — `src/app/data/` is for data shared across multiple features
 

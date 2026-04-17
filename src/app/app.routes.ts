@@ -33,6 +33,10 @@ export const routes: Routes = [
         path: 'chest',
         loadComponent: () => import('./features/chest/chest').then((m) => m.Chest),
       },
+      {
+        path: 'gallery',
+        loadComponent: () => import('./features/gallery/gallery').then((m) => m.Gallery),
+      }
     ],
   },
 ];

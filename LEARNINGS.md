@@ -822,6 +822,72 @@ If you need access from TypeScript (not just the template), use `ViewChild` inst
 
 ---
 
+## 🖼️ SQ-04 — Galerie des Légendes
+
+### @let pour le type narrowing dans le template
+
+Quand un signal est typé `T | null`, chaque appel `signal()` est indépendant pour le type checker — même à l'intérieur d'un `@if`, il exige `?.` sur chaque accès.
+
+Solution : capturer la valeur une fois avec `@let`, puis la narrower avec `@if` :
+
+```html
+@let l = legend();
+@if(l) {
+  <p>{{ l.name }}</p>    <!-- ✅ plus besoin de ?. -->
+  <p>{{ l.level }}</p>
+}
+```
+
+Alternative avec `@if ... as` :
+
+```html
+@if(legend(); as l) {
+  <p>{{ l.name }}</p>
+}
+```
+
+Dans les deux cas, `l` est de type `T` (non-null) à l'intérieur du bloc.
+
+### input<T | null> vs input.required<T> — le cas ng-content dans une modal
+
+Quand un composant est projeté via `ng-content` dans une modal, il existe dans le DOM **dès le chargement** — même avant que la modal soit ouverte.
+
+```html
+<app-modal>
+  <app-legend-card modal-body [legend]="selectedLegend()"></app-legend-card>
+</app-modal>
+```
+
+Si `selectedLegend()` est `null` au démarrage et que `LegendCard` déclare `input.required<LegendModel>()`, Angular exigera une valeur non-nulle à tout moment — impossible ici.
+
+```typescript
+// ❌ input.required — impossible si la valeur peut être null au démarrage
+legend = input.required<LegendModel>();
+
+// ✅ input nullable — le composant gère lui-même le cas null
+legend = input<LegendModel | null>(null);
+```
+
+Le piège associé : mettre `<app-modal>` dans un `@if(selectedLegend())` pour forcer `input.required()` — ça résout le type mais casse `@ViewChild(Modal)` (l'élément conditionnel ne peut pas être résolu statiquement).
+
+**Règle :** si le composant doit exister avant que la donnée soit disponible, utilise `input<T | null>` et gère le cas null avec `@if`/`@let` dans le template.
+
+### Où placer les données statiques
+
+| Cas | Emplacement |
+|---|---|
+| Données utilisées par une seule feature | `features/<feature>/<feature>.data.ts` |
+| Données partagées entre plusieurs features | `shared/data/` ou `app/data/` |
+
+```
+features/gallery/
+  legends.data.ts    ← ✅ uniquement utilisé par LegendsService
+  legend.model.ts
+  legends.service.ts
+```
+
+---
+
 ## ⚙️ Angular CLI & Tooling
 
 ### ng generate naming pitfall

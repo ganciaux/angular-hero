@@ -1,0 +1,12 @@
+<h2>Legends</h2>
+@for(legend of legendsService.legends(); track legend.id) {
+  <div class="legend">
+    <h3>{{legend.name}}</h3>
+    <p>{{legend.story}} <button (click)="selectedLegend.set(legend); modal.open();">View Details</button></p>
+  </div>
+}
+
+<app-modal #legendModal>
+    <h3 modal-header>{{selectedLegend()?.name}} Details</h3>
+    <app-legend-card modal-body [legend]="selectedLegend()"></app-legend-card>
+</app-modal>
