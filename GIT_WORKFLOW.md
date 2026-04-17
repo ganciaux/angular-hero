@@ -87,9 +87,30 @@ git checkout mission/001-init-project
 
 ## 🧹 Delete branch after merge
 
+Local only :
 ```bash
 git branch -d mission/001-init-project
 ```
+
+Local + remote :
+```bash
+git branch -d mission/001-init-project
+git push origin --delete mission/001-init-project
+```
+
+Nettoyage en masse (toutes les branches sauf `main` et une branche active) :
+```bash
+# Local
+git branch | grep -v "main\|mission/019-active\|\*" | xargs git branch -D
+
+# Remote (lister d'abord)
+git branch -r
+
+# Puis supprimer explicitement
+git push origin --delete branch-1 branch-2 branch-3
+```
+
+> Bonne pratique : supprimer la branche juste après le merge — ne pas laisser s'accumuler.
 
 ---
 
