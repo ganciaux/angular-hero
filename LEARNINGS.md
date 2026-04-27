@@ -822,6 +822,52 @@ If you need access from TypeScript (not just the template), use `ViewChild` inst
 
 ---
 
+## 🚦 Lazy Loading
+
+### Eager vs Lazy
+
+| | Eager | Lazy |
+|---|---|---|
+| Chargement | Au démarrage | Au premier accès à la route |
+| Bundle | Tout dans `main.js` | Chunk JS séparé par route |
+| Temps de démarrage | Plus lent | Plus rapide |
+
+### loadComponent — dynamic import
+
+```typescript
+{
+  path: 'hero',
+  loadComponent: () => import('./features/hero/hero').then(m => m.Hero)
+}
+```
+
+- `import()` = dynamic import — le navigateur ne charge le fichier qu'à la première navigation
+- Le chunk est mis en **cache** après le premier chargement — les navigations suivantes ne re-téléchargent rien
+- La liste des chunks est visible à la compilation (`ng build`) ou dans le terminal `ng serve`
+
+### Chunks partagés anonymes
+
+Quand plusieurs features utilisent le même composant (`Panel`, `Modal`...), Angular extrait ce code dans un chunk commun sans nom. Ce chunk est chargé une seule fois et partagé entre toutes les features qui en ont besoin.
+
+```
+chunk-HKVNHQQT.js   | -    ← code partagé (Panel, Modal, etc.)
+chunk-JGDS2HHE.js   | about ← chunk de la route /about
+chunk-QDWCW5TT.js   | inventory ← chunk de la route /inventory
+```
+
+### PreloadAllModules
+
+```typescript
+import { PreloadAllModules, provideRouter, withPreloading } from '@angular/router';
+
+provideRouter(routes, withPreloading(PreloadAllModules))
+```
+
+Précharge tous les chunks lazy **en arrière-plan** après le premier rendu — sans bloquer l'affichage initial.
+À utiliser avec prudence : charge tout même ce que l'utilisateur ne visitera peut-être pas.
+
+---
+
 ## 🖼️ SQ-04 — Galerie des Légendes
 
 ### @let pour le type narrowing dans le template

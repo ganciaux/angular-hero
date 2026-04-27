@@ -27,6 +27,7 @@
 - 015-template-references
 - 015-template-references-ex
 - SQ-04-galerie
+- 019-lazy-loading
 
 ## 🧠 Learned Concepts
 
@@ -102,4 +103,8 @@
 - `@let l = signal(); @if(l)` — type narrowing without `?.` in template
 - `input<T | null>(null)` instead of `input.required<T>()` when content is projected via `ng-content` and the parent can't guarantee a non-null value at all times
 - Static data files belong in the feature folder — `src/app/data/` is for data shared across multiple features
+- Lazy loading (`loadComponent`) — chunk chargé au premier accès à la route, mis en cache ensuite
+- Eager vs lazy — eager = tout dans `main.js`, lazy = chunk séparé par route
+- `PreloadAllModules` — précharge les chunks lazy en arrière-plan après le premier rendu
+- Chunks partagés anonymes — Angular extrait automatiquement le code commun entre features (ex: `Panel`, `Modal`) dans des chunks séparés pour éviter la duplication
 
