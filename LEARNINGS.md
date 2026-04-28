@@ -868,6 +868,94 @@ Précharge tous les chunks lazy **en arrière-plan** après le premier rendu —
 
 ---
 
+## 🗂️ Child Routes
+
+### Structure
+
+Un composant parent devient un **shell** : il affiche la structure commune et délègue le contenu via `<router-outlet />`.
+
+```typescript
+// app.routes.ts
+{
+  path: 'inventory',
+  loadComponent: () => import('./features/inventory/inventory').then(m => m.Inventory),
+  children: [
+    { path: '', loadComponent: () => import('./inventory-list/inventory-list').then(m => m.InventoryList) },
+    { path: ':id', loadComponent: () => import('./inventory-detail/inventory-detail').then(m => m.InventoryDetail) }
+  ]
+}
+```
+
+```html
+<!-- inventory.html — shell -->
+<h2>Inventory</h2>
+<router-outlet />   ← les enfants s'affichent ici
+```
+
+### Piège — loadComponent manquant sur le parent
+
+Sans `loadComponent` sur la route parent, Angular ne monte pas le shell — il va directement aux children. Le `<h2>` et le `<router-outlet />` n'apparaissent jamais.
+
+```typescript
+// ❌ pas de shell — Angular ignore le composant parent
+{ path: 'inventory', children: [...] }
+
+// ✅ shell monté avant les children
+{ path: 'inventory', loadComponent: () => ..., children: [...] }
+```
+
+### Lire un paramètre de route
+
+```typescript
+export class InventoryDetail implements OnInit {
+  private route = inject(ActivatedRoute);
+
+  ngOnInit() {
+    const id = this.route.snapshot.paramMap.get('id'); // string | null
+    if (!id) return;
+    // utiliser id
+  }
+}
+```
+
+`snapshot.paramMap.get()` retourne `string | null` — toujours vérifier avant d'utiliser.
+
+### Lien vers une child route
+
+```html
+<!-- chemin relatif — résolu depuis la route courante -->
+<a [routerLink]="[item.id]">Détail</a>
+
+<!-- chemin absolu -->
+<a [routerLink]="['/inventory', item.id]">Détail</a>
+```
+
+### input<boolean>(false) — comportement optionnel dans un dumb component
+
+Quand un composant est réutilisé dans plusieurs contextes avec des besoins différents, un `input<boolean>` optionnel évite de dupliquer le composant :
+
+```typescript
+// item-card.ts
+showLink = input<boolean>(false);
+```
+
+```html
+<!-- item-card.html -->
+@if(showLink()) {
+  <a [routerLink]="[item().id]">Détail</a>
+}
+```
+
+```html
+<!-- liste → lien visible -->
+<app-item-card [item]="item" [showLink]="true" />
+
+<!-- détail → lien masqué (défaut false) -->
+<app-item-card [item]="item" />
+```
+
+---
+
 ## 🖼️ SQ-04 — Galerie des Légendes
 
 ### @let pour le type narrowing dans le template

@@ -28,6 +28,7 @@
 - 015-template-references-ex
 - SQ-04-galerie
 - 019-lazy-loading
+- 020-child-routes
 
 ## 🧠 Learned Concepts
 
@@ -107,4 +108,8 @@
 - Eager vs lazy — eager = tout dans `main.js`, lazy = chunk séparé par route
 - `PreloadAllModules` — précharge les chunks lazy en arrière-plan après le premier rendu
 - Chunks partagés anonymes — Angular extrait automatiquement le code commun entre features (ex: `Panel`, `Modal`) dans des chunks séparés pour éviter la duplication
+- Child routes — `children: []` dans une route + `<router-outlet />` dans le parent pour des sous-pages
+- `loadComponent` obligatoire sur la route parent pour que le shell s'affiche
+- `ActivatedRoute` + `snapshot.paramMap.get('id')` pour lire un paramètre de route
+- `input<boolean>(false)` pour rendre un comportement optionnel dans un composant dumb sans le modifier
 
