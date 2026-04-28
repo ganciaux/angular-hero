@@ -1,4 +1,7 @@
 <p [class.equipped]="item().equipped">
   {{ item().name | titlecase }} {{ item().type | itemType }} ({{ item().quantity }}) <button (click)="removed.emit(item().id)">Remove</button>
   <button (click)="equipped.emit(item().id)"> @if (item().equipped) { {{ 'Unequip' | uppercase }} } @else { {{ 'Equip' | uppercase }} } </button>
+  @if(showLink()){
+    <a [routerLink]="[item().id]">lien</a>
+  }
 </p>

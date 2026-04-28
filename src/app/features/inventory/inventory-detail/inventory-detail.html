@@ -1,0 +1,7 @@
+@let itemDetails=item();
+
+@if (itemDetails){
+  <app-item-card [item]="itemDetails" [showLink]="false"/>
+}@else{
+  <p>item not found</p>
+}

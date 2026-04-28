@@ -20,6 +20,10 @@ export const routes: Routes = [
       {
         path: 'inventory',
         loadComponent: () => import('./features/inventory/inventory').then((m) => m.Inventory),
+        children: [
+          { path: '', loadComponent: () => import('./features/inventory/inventory-list/inventory-list').then((m) => m.InventoryList) },
+          { path: ':id', loadComponent: () => import('./features/inventory/inventory-detail/inventory-detail').then((m) => m.InventoryDetail) }
+        ]
       },
       {
         path: 'journal',
