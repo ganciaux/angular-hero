@@ -1096,6 +1096,77 @@ features/gallery/
 
 ---
 
+## 🔄 Resolvers
+
+### ResolveFn — précharger des données avant la route
+
+Un resolver s'exécute **avant** que le composant soit créé — Angular attend que les données soient prêtes avant d'activer la route.
+
+```typescript
+// features/inventory/resolvers/item.resolver.ts
+import { inject } from '@angular/core';
+import { ResolveFn } from '@angular/router';
+
+export const itemResolver: ResolveFn<ItemModel | undefined> = (route) => {
+  const inventoryService = inject(InventoryService);
+  const id = route.paramMap.get('id') ?? '';
+  return inventoryService.findItemById(id);
+};
+```
+
+- `ResolveFn<T>` — type du resolver, `T` est le type retourné
+- Peut retourner une valeur directe, une `Promise`, ou un `Observable`
+- `inject()` fonctionne dans un resolver comme dans un composant ou un service
+
+### Appliquer un resolver à une route
+
+```typescript
+{
+  path: ':id',
+  resolve: { item: itemResolver },
+  loadComponent: () => import('./inventory-detail/inventory-detail').then(m => m.InventoryDetail)
+}
+```
+
+La clé `item` correspond au nom sous lequel la donnée sera accessible dans le composant.
+
+### Lire les données résolues dans le composant
+
+```typescript
+export class InventoryDetail {
+  private route = inject(ActivatedRoute);
+  protected item = this.route.snapshot.data['item'] as ItemModel | undefined;
+}
+```
+
+`route.snapshot.data` contient toutes les données résolues pour cette route.
+La donnée est disponible **dès la construction** du composant — pas besoin de `ngOnInit` ni de `signal`.
+
+### Resolver vs ngOnInit
+
+| | `ngOnInit` | Resolver |
+|---|---|---|
+| Quand | Après affichage du composant | Avant affichage |
+| Données disponibles | Après chargement async | Dès le premier rendu |
+| Composant affiché si pas de données | Oui (état vide) | Non (attend) |
+| Cas d'usage | Données non critiques | Données nécessaires au rendu |
+
+### signal vs propriété simple — quand choisir
+
+```typescript
+// signal — pour un état réactif qui change dans le temps
+protected item = signal<ItemModel | undefined>(undefined);
+// dans le template : item()
+
+// propriété simple — quand la valeur est connue dès la construction et ne change pas
+protected item = this.route.snapshot.data['item'] as ItemModel | undefined;
+// dans le template : item
+```
+
+Avec un resolver, la donnée est synchrone et ne changera pas pendant la vie du composant → propriété simple.
+
+---
+
 ## ⚙️ Angular CLI & Tooling
 
 ### ng generate naming pitfall

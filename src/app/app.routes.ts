@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { heroLevelGuard } from './core/guards/hero-level-guard';
+import { itemResolver } from './features/inventory/resolvers/item.resolver';
 
 export const routes: Routes = [
   {
@@ -24,7 +25,10 @@ export const routes: Routes = [
         loadComponent: () => import('./features/inventory/inventory').then((m) => m.Inventory),
         children: [
           { path: '', loadComponent: () => import('./features/inventory/inventory-list/inventory-list').then((m) => m.InventoryList) },
-          { path: ':id', loadComponent: () => import('./features/inventory/inventory-detail/inventory-detail').then((m) => m.InventoryDetail) }
+          { 
+            path: ':id',
+            resolve: { item: itemResolver }, 
+            loadComponent: () => import('./features/inventory/inventory-detail/inventory-detail').then((m) => m.InventoryDetail) }
         ]
       },
       {

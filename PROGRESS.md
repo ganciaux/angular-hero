@@ -30,6 +30,7 @@
 - 019-lazy-loading
 - 020-child-routes
 - 021-route-guards
+- 022-resolvers
 
 ## 🧠 Learned Concepts
 
@@ -118,4 +119,8 @@
 - `canActivate: [guard]` sur une route dans `app.routes.ts`
 - Service dédié pour transmettre des messages entre guards et composants (`NavigationService`)
 - `protected readonly` sur les services injectés — automatisme à garder dans tous les composants
+- Resolver fonctionnel (`ResolveFn<T>`) — précharge des données avant que le composant soit créé
+- `resolve: { key: resolver }` sur une route — la donnée est disponible dans `route.snapshot.data['key']`
+- Resolver vs `ngOnInit` — resolver bloque la navigation jusqu'aux données, `ngOnInit` charge après l'affichage
+- Propriété simple vs `signal` — quand la donnée est disponible synchrone et ne change pas, une propriété suffit
 
