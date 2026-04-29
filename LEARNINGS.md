@@ -1167,6 +1167,78 @@ Avec un resolver, la donnée est synchrone et ne changera pas pendant la vie du 
 
 ---
 
+## 🌐 HttpClient
+
+### Activer HttpClient
+
+```typescript
+// app.config.ts
+import { provideHttpClient } from '@angular/common/http';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideHttpClient(),
+  ]
+};
+```
+
+`provideHttpClient()` rend `HttpClient` injectable dans toute l'application. Sans ça, Angular lève une erreur à l'injection.
+
+### Observable — flux lazy
+
+`HttpClient` retourne des `Observable` (RxJS), pas des `Promise` ni des valeurs directes.
+
+**Lazy** = rien ne se passe tant qu'on ne subscribe pas :
+
+```typescript
+const obs$ = this.http.get<ItemModel[]>('/api/items'); // pas de requête ici
+
+obs$.subscribe(items => {
+  // requête lancée ici — items arrive quand le serveur répond
+});
+```
+
+Convention : les variables Observable sont suffixées par `$`.
+
+### GET dans un service
+
+```typescript
+@Injectable({ providedIn: 'root' })
+export class InventoryService {
+  private readonly http = inject(HttpClient);
+  private _items = signal<ItemModel[]>([]);
+  readonly items = this._items.asReadonly();
+
+  loadItems() {
+    this.http.get<ItemModel[]>('http://localhost:3000/inventory').subscribe(items => {
+      this._items.set(items);
+    });
+  }
+}
+```
+
+- `get<T[]>(url)` — type générique `T[]` pour que TypeScript connaisse la forme de la réponse
+- Observable HTTP se complète automatiquement après la réponse — **pas besoin de `unsubscribe()`**
+- Le signal est mis à jour dans le `subscribe()` — Angular détecte le changement et met à jour l'UI
+
+### Déclencher le chargement
+
+C'est le composant smart qui décide quand charger — le service expose une méthode, il ne charge pas tout seul :
+
+```typescript
+export class Inventory {
+  private readonly inventoryService = inject(InventoryService);
+
+  constructor() {
+    this.inventoryService.loadItems();
+  }
+}
+```
+
+`constructor` est valide pour déclencher un chargement quand on n'a pas besoin du DOM.
+
+---
+
 ## ⚙️ Angular CLI & Tooling
 
 ### ng generate naming pitfall

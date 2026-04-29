@@ -1,17 +1,22 @@
-import { Injectable, signal } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { ItemModel } from './inventory.model';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
 })
 export class InventoryService {
-  private _items = signal<ItemModel[]>([
-    { id: crypto.randomUUID(), name: 'item 1', type: 'divers', quantity: 1, equipped: false },
-    { id: crypto.randomUUID(), name: 'item 2', type: 'potion', quantity: 2, equipped: false },
-    { id: crypto.randomUUID(), name: 'item 3', type: 'sword', quantity: 2, equipped: false },
-  ]);
+  private readonly httpClient = inject(HttpClient);
+
+  private _items = signal<ItemModel[]>([]);
 
   readonly items = this._items.asReadonly();
+
+  loadItems() {
+    this.httpClient.get<ItemModel[]>('http://localhost:3000/inventory').subscribe(items => {
+      this._items.set(items);
+    });
+  }
 
   addItem(item:ItemModel) {
     this._items.update(items => [...items, item]);

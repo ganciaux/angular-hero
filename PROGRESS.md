@@ -31,6 +31,7 @@
 - 020-child-routes
 - 021-route-guards
 - 022-resolvers
+- 023-http-client
 
 ## 🧠 Learned Concepts
 
@@ -123,4 +124,9 @@
 - `resolve: { key: resolver }` sur une route — la donnée est disponible dans `route.snapshot.data['key']`
 - Resolver vs `ngOnInit` — resolver bloque la navigation jusqu'aux données, `ngOnInit` charge après l'affichage
 - Propriété simple vs `signal` — quand la donnée est disponible synchrone et ne change pas, une propriété suffit
+- `provideHttpClient()` — activer HttpClient dans `app.config.ts`
+- `HttpClient.get<T[]>(url)` retourne un `Observable<T[]>` — rien ne se passe avant `subscribe()`
+- `subscribe(data => ...)` — callback appelé quand la réponse arrive, HttpClient se complète seul (pas de unsubscribe)
+- Convention `$` — les variables Observable se suffixent par `$` (ex: `items$`)
+- Le composant smart déclenche `loadItems()`, le service ne charge pas tout seul
 
