@@ -868,6 +868,80 @@ Précharge tous les chunks lazy **en arrière-plan** après le premier rendu —
 
 ---
 
+## 🛡️ Route Guards
+
+### Guard fonctionnel — CanActivateFn
+
+Un guard est une **fonction** (pas une classe) qui s'exécute avant le chargement d'une route.
+
+```typescript
+// core/guards/hero-level.guard.ts
+import { inject } from '@angular/core';
+import { CanActivateFn, Router } from '@angular/router';
+
+export const heroLevelGuard: CanActivateFn = (route, state) => {
+  const heroService = inject(HeroService);
+  const router = inject(Router);
+
+  if (heroService.hero().level < 5) {
+    return router.createUrlTree(['/']);  // redirection
+  }
+  return true;  // accès autorisé
+};
+```
+
+`inject()` fonctionne dans un guard exactement comme dans un composant ou un service.
+
+### Appliquer un guard
+
+```typescript
+{
+  path: 'hero',
+  canActivate: [heroLevelGuard],
+  loadComponent: () => import('./features/hero/hero').then(m => m.Hero),
+}
+```
+
+### createUrlTree vs navigate + return false
+
+| | `return router.createUrlTree(['/'])` | `router.navigate(['/']); return false` |
+|---|---|---|
+| Navigations | 1 (atomique) | 2 (bloque + redémarre) |
+| Contrôle | Angular garde le contrôle | Deux événements indépendants |
+| Recommandé | ✅ | ❌ |
+
+`createUrlTree` retourne un `UrlTree` à Angular — il change la destination dans la même navigation.
+`navigate() + false` tue la navigation courante et en démarre une nouvelle depuis zéro.
+
+### Transmettre un message depuis un guard
+
+Un guard ne peut pas afficher de message directement — il peut écrire dans un service partagé que les composants lisent :
+
+```typescript
+// Dans le guard
+navigationService.addLog('Niveau insuffisant', route.url.join('/'));
+return router.createUrlTree(['/']);
+
+// Dans home.ts
+protected readonly navigationService = inject(NavigationService);
+
+// Dans home.html
+@for(log of navigationService.logs(); track $index) {
+  <p>{{ log.message }}</p>
+}
+```
+
+### Types de guards
+
+| Guard | Rôle |
+|---|---|
+| `canActivate` | Accès à une route |
+| `canActivateChild` | Accès aux child routes |
+| `canDeactivate` | Quitter une route (ex: form non sauvegardé) |
+| `canMatch` | Choisir quelle route matcher |
+
+---
+
 ## 🗂️ Child Routes
 
 ### Structure

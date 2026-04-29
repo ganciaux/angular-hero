@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { NavigationService } from '../../core/services/navigation.service';
 
 @Component({
   selector: 'app-home',
@@ -7,5 +8,5 @@ import { Component } from '@angular/core';
   styleUrl: './home.scss',
 })
 export class Home {
-
+  protected readonly navigationService = inject(NavigationService);
 }

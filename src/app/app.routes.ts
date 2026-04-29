@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { heroLevelGuard } from './core/guards/hero-level-guard';
 
 export const routes: Routes = [
   {
@@ -15,6 +16,7 @@ export const routes: Routes = [
       },
       {
         path: 'hero',
+        canActivate: [heroLevelGuard],
         loadComponent: () => import('./features/hero/hero').then((m) => m.Hero),
       },
       {

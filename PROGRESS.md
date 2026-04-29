@@ -29,6 +29,7 @@
 - SQ-04-galerie
 - 019-lazy-loading
 - 020-child-routes
+- 021-route-guards
 
 ## 🧠 Learned Concepts
 
@@ -112,4 +113,9 @@
 - `loadComponent` obligatoire sur la route parent pour que le shell s'affiche
 - `ActivatedRoute` + `snapshot.paramMap.get('id')` pour lire un paramètre de route
 - `input<boolean>(false)` pour rendre un comportement optionnel dans un composant dumb sans le modifier
+- Guard fonctionnel (`CanActivateFn`) — fonction simple avec `inject()`, retourne `true`, `false`, ou `UrlTree`
+- `router.createUrlTree(['/'])` — redirection atomique dans le même événement de navigation (vs `navigate() + return false`)
+- `canActivate: [guard]` sur une route dans `app.routes.ts`
+- Service dédié pour transmettre des messages entre guards et composants (`NavigationService`)
+- `protected readonly` sur les services injectés — automatisme à garder dans tous les composants
 

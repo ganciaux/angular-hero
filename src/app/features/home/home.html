@@ -1,1 +1,6 @@
+@let logs = navigationService.logs();
+
+@for(log of logs; track $index) {
+  <p>{{log.route}}: {{log.message}}</p>
+}
 <p>home works!</p>
