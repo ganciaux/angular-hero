@@ -1237,6 +1237,76 @@ export class Inventory {
 
 `constructor` est valide pour déclencher un chargement quand on n'a pas besoin du DOM.
 
+### POST — créer une ressource
+
+```typescript
+addItem(item: Omit<ItemModel, 'id'>) {
+  this.http.post<ItemModel>('http://localhost:3000/inventory', item).subscribe(created => {
+    this._items.update(items => [...items, created]);
+  });
+}
+```
+
+- L'item envoyé ne contient pas d'`id` — json-server le génère côté serveur
+- On utilise l'item **retourné** par le serveur (avec le vrai `id`), pas l'original
+- `Omit<ItemModel, 'id'>` — utilitaire TypeScript pour exprimer "objet sans id"
+
+### DELETE — supprimer une ressource
+
+```typescript
+removeItem(id: string) {
+  this.http.delete(`http://localhost:3000/inventory/${id}`).subscribe(() => {
+    this._items.update(items => items.filter(i => i.id !== id));
+  });
+}
+```
+
+- L'`id` est dans l'URL, pas dans le body
+- `delete()` ne retourne pas de body utile — callback vide `() => {}`
+- On filtre le signal après confirmation du serveur
+
+### PATCH — mise à jour partielle
+
+```typescript
+toggleEquip(id: string) {
+  const item = this.findItemById(id);
+  if (!item) return;
+  this.http.patch<ItemModel>(`http://localhost:3000/inventory/${id}`, { equipped: !item.equipped })
+    .subscribe(updated => {
+      this._items.update(items => items.map(i => i.id === id ? updated : i));
+    });
+}
+```
+
+- `patch<T>()` — le type générique est important, sinon `updated` est typé `Object`
+- Envoie uniquement les champs modifiés (≠ `put()` qui remplace tout l'objet)
+- On utilise l'item retourné par le serveur pour mettre à jour le signal
+
+### Mise à jour pessimiste
+
+Attendre la réponse serveur avant de modifier le signal local.
+
+| | Pessimiste | Optimiste |
+|---|---|---|
+| Signal mis à jour | Après `subscribe()` | Avant la requête |
+| UX | Légère latence | Réactif immédiat |
+| Complexité | Simple | Rollback à gérer si erreur |
+
+### Variable shadowing — piège dans les closures
+
+```typescript
+const item = this.findItemById(id); // item = ItemModel
+
+this._items.update(items => items.map(item => { // ❌ item écrase le précédent
+  return { ...item, equipped: !item.equipped }; // quel item ?
+}));
+
+// ✅ renommer le paramètre du map
+this._items.update(items => items.map(i => i.id === id ? updated : i));
+```
+
+Règle : dans une closure imbriquée, ne jamais réutiliser le même nom qu'une variable parente.
+
 ---
 
 ## ⚙️ Angular CLI & Tooling

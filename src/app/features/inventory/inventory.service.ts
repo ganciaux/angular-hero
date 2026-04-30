@@ -18,12 +18,16 @@ export class InventoryService {
     });
   }
 
-  addItem(item:ItemModel) {
-    this._items.update(items => [...items, item]);
+  addItem(item: Omit<ItemModel, 'id'>) {
+    this.httpClient.post<ItemModel>('http://localhost:3000/inventory', item).subscribe(newItem => {
+      this._items.update(items => [...items, newItem]);
+    });
   }
 
   removeItem(id: string) {
-    this._items.update(items => items.filter(item => item.id !== id));
+    this.httpClient.delete(`http://localhost:3000/inventory/${id}`).subscribe(() => {
+      this._items.update(items => items.filter(item => item.id !== id));
+    });
   }
 
   findItemById(id: string): ItemModel | undefined {
@@ -31,11 +35,14 @@ export class InventoryService {
   }
 
   toggleEquip(id: string) {
-    this._items.update(items => items.map(item => {
-      if (item.id === id) {
-        return { ...item, equipped: !item.equipped };
-      }
-      return item;
-    }));
+    const item = this.findItemById(id);
+    if (!item) {
+      return;
+    }
+    this.httpClient.patch<ItemModel>(`http://localhost:3000/inventory/${id}`, { equipped: !item.equipped })
+      .subscribe(updated => {
+        this._items.update(items => items.map(i => i.id === id ? updated : i));
+      });
+
   }
 }

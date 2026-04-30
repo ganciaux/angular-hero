@@ -32,6 +32,7 @@
 - 021-route-guards
 - 022-resolvers
 - 023-http-client
+- 024-http-mutations
 
 ## 🧠 Learned Concepts
 
@@ -129,4 +130,10 @@
 - `subscribe(data => ...)` — callback appelé quand la réponse arrive, HttpClient se complète seul (pas de unsubscribe)
 - Convention `$` — les variables Observable se suffixent par `$` (ex: `items$`)
 - Le composant smart déclenche `loadItems()`, le service ne charge pas tout seul
+- `http.post<T>(url, body)` — créer, utiliser l'item retourné par le serveur (pas l'original)
+- `http.delete(url)` — supprimer, callback vide `() => {}`
+- `http.patch<T>(url, body)` — mise à jour partielle (≠ `put` qui remplace tout)
+- `Omit<T, 'id'>` — utilitaire TypeScript : "cet objet n'a pas encore d'id"
+- Mise à jour pessimiste — attendre la réponse serveur avant de modifier le signal
+- Variable shadowing — éviter de réutiliser le même nom dans une closure imbriquée
 

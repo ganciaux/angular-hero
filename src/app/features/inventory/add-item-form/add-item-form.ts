@@ -12,7 +12,7 @@ export class AddItemForm {
   name = '';
   type = '';
   quantity = 1;
-  added = output<ItemModel>();
+  added = output<Omit<ItemModel, 'id'>>();
 
   clear() {
     this.name = '';
@@ -25,11 +25,11 @@ export class AddItemForm {
       return;
     }
     this.added.emit({
-      id: crypto.randomUUID(),
       name: this.name,
       type: this.type,
       quantity: this.quantity,
-    } as ItemModel);
+      equipped: false,
+    });
     this.clear();
   }
 }
