@@ -1,0 +1,11 @@
+@for(donjon of donjonService.donjons(); track donjon.id){
+  <div>Name: {{donjon.name}}</div>
+  <div>difficulty: {{donjon.difficulty}}</div>
+  <div>level: {{donjon.minLevel}}</div>
+  <div>
+    <a [routerLink]="[donjon.id]">view</a>
+  </div>
+  <br>
+} @empty {
+  <p>No donjon</p>
+}

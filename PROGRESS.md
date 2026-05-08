@@ -35,6 +35,8 @@
 - 024-http-mutations
 - 025-loading-error-states
 - 026-interceptors
+- 027-rxjs-operators
+- SQ-05-donjons
 
 ## 🧠 Learned Concepts
 

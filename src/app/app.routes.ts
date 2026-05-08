@@ -1,6 +1,8 @@
 import { Routes } from '@angular/router';
 import { heroLevelGuard } from './core/guards/hero-level-guard';
 import { itemResolver } from './features/inventory/resolvers/item.resolver';
+import { donjonResolver } from './features/donjon/resolvers/donjon.resolver';
+import { donjonLevelGuard } from './core/guards/donjon-level-guard';
 
 export const routes: Routes = [
   {
@@ -46,7 +48,19 @@ export const routes: Routes = [
       {
         path: 'gallery',
         loadComponent: () => import('./features/gallery/gallery').then((m) => m.Gallery),
-      }
+      },
+      {
+        path: 'donjons',
+        loadComponent: () => import('./features/donjon/donjon').then((m) => m.Donjon),
+        children: [
+          { path: '', loadComponent: () => import('./features/donjon/donjon-list/donjon-list').then((m) => m.DonjonList) },
+          { 
+            path: ':id',
+            canActivate: [donjonLevelGuard],
+            resolve: { donjon: donjonResolver }, 
+            loadComponent: () => import('./features/donjon/donjon-detail/donjon-detail').then((m) => m.DonjonDetail) }
+        ]
+      },
     ],
   },
 ];

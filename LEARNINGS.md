@@ -1002,7 +1002,12 @@ export class InventoryDetail implements OnInit {
 
 <!-- chemin absolu -->
 <a [routerLink]="['/inventory', item.id]">Détail</a>
+
+<!-- remonter d'un niveau (depuis :id → liste) -->
+<a [routerLink]="['..']">Retour</a>
 ```
+
+`['..']` est préférable à un chemin absolu pour les liens de retour — si le path parent change, le lien reste valide.
 
 ### input<boolean>(false) — comportement optionnel dans un dumb component
 
@@ -1164,6 +1169,25 @@ protected item = this.route.snapshot.data['item'] as ItemModel | undefined;
 ```
 
 Avec un resolver, la donnée est synchrone et ne changera pas pendant la vie du composant → propriété simple.
+
+### Ordre d'exécution : guard avant resolver
+
+Angular exécute toujours les guards **avant** les resolvers :
+
+1. `canActivate` — si retourne `false` ou `UrlTree`, navigation annulée
+2. `resolve` — seulement si tous les guards ont retourné `true`
+
+Conséquence : un guard **ne peut pas** accéder aux données d'un resolver sur la même route — elles n'existent pas encore.
+
+```typescript
+{
+  path: ':id',
+  canActivate: [donjonLevelGuard],   // 1. s'exécute en premier
+  resolve: { donjon: donjonResolver }, // 2. s'exécute après, si guard OK
+}
+```
+
+Si le guard a besoin de données serveur pour décider (ex: `minLevel` d'un donjon), il doit les fetcher lui-même via `HttpClient` — indépendamment du resolver. Les deux font un appel HTTP sur la même ressource.
 
 ---
 
@@ -1333,6 +1357,139 @@ Template :
 | Cas d'usage | Loading par section | Auth, logging, erreurs 401/500 |
 
 Les deux patterns coexistent — intercepteur pour les préoccupations transversales, service pour les états locaux.
+
+### Quand subscribe dans le service vs retourner l'Observable
+
+**Règle : le service subscribe quand il possède l'état résultant (le signal).**
+
+| Cas | Pattern | Exemple |
+|---|---|---|
+| Le résultat met à jour un signal | Service subscribe | `loadDonjons()` → `_donjons.set(items)` |
+| Le résultat est utilisé une fois | Retourner l'Observable | `getById(id)` → guard / resolver s'abonnent |
+
+```typescript
+// service subscribe → il gère le signal
+loadDonjons() {
+  this.http.get<DonjonModel[]>(url).subscribe(donjons => {
+    this._donjons.set(donjons);
+  });
+}
+
+// retourne l'Observable → l'appelant décide
+getById(id: string): Observable<DonjonModel> {
+  return this.http.get<DonjonModel>(`${url}/${id}`);
+}
+```
+
+Angular subscribe automatiquement aux `Observable` retournés par les guards et resolvers — pas besoin que le service s'en mêle.
+
+### Signal vs fetch individuel dans un service
+
+Si une méthode `getById()` cherche dans le signal au lieu de faire un fetch :
+
+```typescript
+// ⚠️ fragile — retourne undefined si loadDonjons() n'a pas encore tourné
+getById(id: string) {
+  return this._donjons().find(d => d.id === id);
+}
+```
+
+Si l'utilisateur navigue directement vers `/donjons/2` sans passer par la liste, le signal est vide → `undefined`.
+
+**Solution : deux méthodes distinctes.**
+
+```typescript
+loadDonjons()           // fetch tous → signal (pour la liste)
+getById(id): Observable // fetch individuel → Observable (pour guard/resolver)
+```
+
+### map() vs catchError() — contrats différents
+
+`map()` et `catchError()` n'ont pas le même contrat de retour :
+
+| Opérateur | Attend en retour | Qui emballe dans un Observable |
+|---|---|---|
+| `map()` | une valeur | `map()` lui-même |
+| `catchError()` | un Observable | toi (avec `of()`, etc.) |
+
+```typescript
+map(donjon => true)              // ✅ retourne une valeur
+map(donjon => of(true))          // ❌ Observable<Observable<boolean>>
+
+catchError(() => of(true))       // ✅ retourne un Observable
+catchError(() => true)           // ❌ retourne une valeur brute → plante
+```
+
+---
+
+## 🏰 RxJS — pipe, map, catchError, of
+
+### pipe() — composer des opérateurs
+
+`pipe()` s'appelle sur un Observable et applique des opérateurs dans l'ordre. Ne déclenche rien — c'est une déclaration.
+
+```typescript
+observable.pipe(
+  map(value => transform(value)),
+  catchError(err => of(fallback))
+)
+```
+
+### map() — transformer la valeur émise
+
+Comme `Array.map()` mais pour un flux. Transforme chaque valeur sans modifier les erreurs.
+
+```typescript
+this.http.get<DonjonModel>(url).pipe(
+  map(donjon => donjon.name)  // Observable<DonjonModel> → Observable<string>
+)
+```
+
+### of() — créer un Observable depuis une valeur
+
+Émet immédiatement une valeur puis se complète. Utilisé pour fournir une valeur de fallback dans `catchError()`.
+
+```typescript
+of(true)       // Observable<boolean> qui émet true
+of(undefined)  // Observable<undefined>
+```
+
+### Guard asynchrone — pattern complet
+
+Quand un guard a besoin de données serveur pour décider, il retourne un `Observable<boolean | UrlTree>`. Angular subscribe lui-même.
+
+```typescript
+export const donjonLevelGuard: CanActivateFn = (route) => {
+  const id = route.paramMap.get('id');
+  if (!id) return false;
+
+  return donjonService.getById(id).pipe(
+    map(donjon => {
+      if (heroService.hero().level >= donjon.minLevel) return true;
+      return router.createUrlTree(['/donjons']);
+    }),
+    catchError(() => of(router.createUrlTree(['/donjons'])))
+  );
+};
+```
+
+### effect() — ne pas utiliser pour l'initialisation
+
+`effect()` réagit aux signaux qu'il lit à l'intérieur. S'il n'en lit aucun, il s'exécute une seule fois et ne se relance jamais — comportement identique à un appel direct dans le constructeur, mais trompeur.
+
+```typescript
+// ❌ effect() sans signal lu — mauvais usage
+constructor() {
+  effect(() => { this.service.loadItems(); }); // s'exécute une fois, jamais relancé
+}
+
+// ✅ appel direct
+constructor() {
+  this.service.loadItems();
+}
+```
+
+`effect()` est réservé aux réactions à des changements de signal, pas à l'initialisation.
 
 ### Intercepteur fonctionnel — HttpInterceptorFn
 
