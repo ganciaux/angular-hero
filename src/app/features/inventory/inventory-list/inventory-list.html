@@ -1,15 +1,20 @@
 <input #searchInput type="text" id="searchInput" placeholder="Search item"/>
 <button (click)="searchInput.focus()">Focus Search</button>
 
-<app-panel>
-  <button (click)="openModal()">Open Inventory Modal</button>
-  <div panel-body>
-    @for(item of inventoryService.items(); track item.id) {
-      <app-item-card [item]="item" (removed)="inventoryService.removeItem($event)" (equipped)="inventoryService.toggleEquip($event)" [showLink]="true"></app-item-card>
-    }
-  </div>
-</app-panel>
-
+@if (inventoryService.loading()) {
+  <p>Chargement...</p>
+} @else if (inventoryService.error()) {
+  <p>{{ inventoryService.error() }}</p>
+} @else {
+  <app-panel>
+    <button (click)="openModal()">Open Inventory Modal</button>
+    <div panel-body>
+      @for(item of inventoryService.items(); track item.id) {
+        <app-item-card [item]="item" (removed)="inventoryService.removeItem($event)" (equipped)="inventoryService.toggleEquip($event)" [showLink]="true"></app-item-card>
+      }
+    </div>
+  </app-panel>
+}
 
 <app-add-item-form (added)="inventoryService.addItem($event)"></app-add-item-form>
 

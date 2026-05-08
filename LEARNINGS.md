@@ -1292,6 +1292,111 @@ Attendre la réponse serveur avant de modifier le signal local.
 | UX | Légère latence | Réactif immédiat |
 | Complexité | Simple | Rollback à gérer si erreur |
 
+### Les trois états d'une requête HTTP
+
+```typescript
+private _loading = signal(false);
+private _error = signal<string | null>(null);
+
+readonly loading = this._loading.asReadonly();
+readonly error = this._error.asReadonly();
+
+loadItems() {
+  this._loading.set(true);
+  this._error.set(null); // reset avant chaque requête
+  this.http.get<ItemModel[]>(url).subscribe({
+    next: (items) => { this._items.set(items); this._loading.set(false); },
+    error: (err) => { this._error.set(err.message); this._loading.set(false); }
+  });
+}
+```
+
+`subscribe()` accepte un objet `{ next, error, complete }` — `next` pour le succès, `error` pour l'échec.
+
+Template :
+```html
+@if (service.loading()) {
+  <p>Chargement...</p>
+} @else if (service.error()) {
+  <p>{{ service.error() }}</p>
+} @else {
+  <!-- liste -->
+}
+```
+
+### Loading local vs loading global
+
+| | Service (local) | Intercepteur (global) |
+|---|---|---|
+| Portée | Une feature | Toutes les requêtes |
+| UX | Feedback localisé | Spinner overlay global |
+| Cas d'usage | Loading par section | Auth, logging, erreurs 401/500 |
+
+Les deux patterns coexistent — intercepteur pour les préoccupations transversales, service pour les états locaux.
+
+### Intercepteur fonctionnel — HttpInterceptorFn
+
+Un intercepteur se place entre Angular et le réseau — il voit toutes les requêtes avant qu'elles partent et toutes les réponses avant qu'elles arrivent.
+
+```typescript
+// core/interceptors/logger.interceptor.ts
+import { HttpInterceptorFn, HttpResponse } from '@angular/common/http';
+import { tap } from 'rxjs';
+
+export const loggerInterceptor: HttpInterceptorFn = (req, next) => {
+  console.log(`[HTTP] → ${req.method} ${req.url}`);
+  return next(req).pipe(
+    tap(event => {
+      if (event instanceof HttpResponse) {
+        console.log(`[HTTP] ← ${event.status} ${req.url}`);
+      }
+    })
+  );
+};
+```
+
+- `req` — la requête sortante (`HttpRequest`)
+- `next` — passe la requête au maillon suivant (réseau ou intercepteur suivant)
+- **Toujours retourner `next(req)`** — sinon la requête ne part jamais
+- `next(req)` retourne un `Observable<HttpEvent<unknown>>`
+
+### Enregistrer un intercepteur
+
+```typescript
+// app.config.ts
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+
+providers: [
+  provideHttpClient(withInterceptors([loggerInterceptor])),
+]
+```
+
+### HttpEvent — type union
+
+`next(req)` émet plusieurs types d'événements au cours d'une requête :
+
+| Type | Quand |
+|---|---|
+| `HttpSentEvent` | Requête envoyée |
+| `HttpHeaderResponse` | Headers reçus |
+| `HttpResponse<T>` | Réponse complète (status + body) |
+| `HttpProgressEvent` | Progression upload/download |
+
+`instanceof HttpResponse` permet de narrower le type pour accéder à `.status` et `.body`.
+
+### tap() — effet de bord sans modifier le flux
+
+`tap()` exécute une fonction sur chaque émission sans altérer la valeur transmise — parfait pour le logging.
+
+```typescript
+return next(req).pipe(
+  tap(event => {
+    // event est observé ici, mais pas modifié
+    if (event instanceof HttpResponse) { ... }
+  })
+);
+```
+
 ### Variable shadowing — piège dans les closures
 
 ```typescript

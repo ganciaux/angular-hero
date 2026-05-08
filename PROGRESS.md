@@ -33,6 +33,8 @@
 - 022-resolvers
 - 023-http-client
 - 024-http-mutations
+- 025-loading-error-states
+- 026-interceptors
 
 ## 🧠 Learned Concepts
 
@@ -136,4 +138,9 @@
 - `Omit<T, 'id'>` — utilitaire TypeScript : "cet objet n'a pas encore d'id"
 - Mise à jour pessimiste — attendre la réponse serveur avant de modifier le signal
 - Variable shadowing — éviter de réutiliser le même nom dans une closure imbriquée
+- `subscribe({ next, error })` — forme objet pour gérer séparément succès et erreur
+- Trois états HTTP : `loading` / `error` / `data` — modélisés avec deux signals dans le service
+- Toujours reset `_loading` et `_error` avant de relancer une requête
+- Loading local (par feature) vs loading global (via intercepteur) — deux patterns différents
+- Intercepteurs : auth headers, logging, erreurs globales — pas pour le loading localisé
 
