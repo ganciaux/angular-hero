@@ -11,7 +11,9 @@ export class HeroService {
     hp: 100,
     maxHp: 100,
     xp: 0,
-    xpNextLevel: 100
+    xpNextLevel: 100,
+    attack: 10,
+    defense: 10
   });
 
   private _actionLogs = signal<string[]>([]);
