@@ -1536,6 +1536,26 @@ this._logs$.next([...this._logs$.value, newMessage]);
 
 Préférer les signaux pour l'état UI. Utiliser `BehaviorSubject` quand les opérateurs RxJS sont nécessaires ou pour des flux d'événements partagés.
 
+### Narrowing de signal — TypeScript ne suit pas le flux cross-méthodes
+
+Après un guard `if (!session) return;`, TypeScript narrow la variable locale `session`. Mais il ne peut pas prouver que `this._session()` (relu plus tard via un callback) est aussi non-null — le type déclaré du signal reste `T | null`.
+
+```typescript
+const session = this._session();
+if (!session) return;
+
+// ✅ TypeScript sait que session est CombatSessionModel (variable locale narrowée)
+const damage = session.hero.attack - session.enemy.defense;
+
+// ❌ TypeScript voit s comme CombatSessionModel | null (type du signal)
+this._session.update(s => ({...s, enemy: {...s.enemy, hp}}));
+
+// ✅ utiliser la variable narrowée dans le callback
+this._session.update(() => ({...session, enemy: {...session.enemy, hp}}));
+```
+
+Règle : dans un `update()`, si le signal est nullable, préférer utiliser la variable locale déjà narrowée plutôt que le paramètre du callback.
+
 ### Machine à états — enum + signal
 
 Modéliser les états possibles avec un enum évite les bugs de faute de frappe et force TypeScript à détecter les états invalides.
@@ -1557,6 +1577,46 @@ Ne pas mettre les logs dans le modèle de session — c'est un flux indépendant
 
 - **Session** (`signal`) — état structuré du combat : héros, ennemi, tour
 - **Logs** (`BehaviorSubject`) — flux d'événements : chaque action ajoutée au fil du temps
+
+---
+
+## ⚔️ Logique de combat
+
+### Calcul des dégâts — minimum garanti
+
+```typescript
+const damage = Math.max(1, attacker.attack - defender.defense);
+const hp = Math.max(0, target.hp - damage);
+```
+
+`Math.max(1, ...)` — toujours au moins 1 dégât.
+`Math.max(0, ...)` — les HP ne descendent jamais en dessous de 0.
+
+### update() avec variable locale capturée
+
+Quand le signal est nullable, capturer la valeur avant le guard et l'utiliser dans le callback évite le problème de narrowing :
+
+```typescript
+const session = this._session();
+if (!session) return;
+
+// ✅ callback ignore le paramètre, utilise la variable narrowée
+this._session.update(() => ({...session, enemy: {...session.enemy, hp}}));
+```
+
+### Tour par tour — enchaînement privé
+
+```
+heroAttacks() [public]
+  → calcule dégâts ennemi
+  → si ennemi mort → onVictory() [private]
+  → sinon → enemyAttacks() [private]
+              → calcule dégâts héros
+              → incrémente turn
+              → si héros mort → onDefeat() [private]
+```
+
+Les méthodes internes (`enemyAttacks`, `onVictory`, `onDefeat`) sont `private` — seul le service orchestre le flux.
 
 ---
 
