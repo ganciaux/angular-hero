@@ -1491,6 +1491,75 @@ constructor() {
 
 `effect()` est réservé aux réactions à des changements de signal, pas à l'initialisation.
 
+---
+
+## ⚔️ RxJS — Subject & BehaviorSubject
+
+### Observable vs Subject
+
+| | Observable | Subject |
+|---|---|---|
+| Qui émet ? | La source (HTTP, timer...) | Toi, via `.next()` |
+| Abonnés | Un par `subscribe()` (froid) | Plusieurs simultanés (chaud) |
+| Cas d'usage | Données externes | Événements internes |
+
+### BehaviorSubject — Subject avec mémoire
+
+Garde la dernière valeur émise et la rejoue immédiatement à tout nouvel abonné. Valeur initiale obligatoire.
+
+```typescript
+import { BehaviorSubject } from 'rxjs';
+
+private _logs$ = new BehaviorSubject<string[]>([]);
+readonly logs$ = this._logs$.asObservable();
+```
+
+- `.value` — accès synchrone à la valeur courante (sans subscribe)
+- `.next(valeur)` — émet une nouvelle valeur
+- `.asObservable()` — expose en lecture seule (l'extérieur ne peut pas appeler `.next()`)
+
+### Ajouter une valeur dans un tableau BehaviorSubject
+
+```typescript
+// équivalent de signal.update() pour BehaviorSubject
+this._logs$.next([...this._logs$.value, newMessage]);
+```
+
+### BehaviorSubject vs signal
+
+| | Signal | BehaviorSubject |
+|---|---|---|
+| Lecture | `count()` | `count$.value` ou `subscribe` |
+| Écriture | `count.set(1)` | `count$.next(1)` |
+| Templates Angular | ✅ natif | Via `async pipe` |
+| Opérateurs RxJS | ❌ | ✅ |
+
+Préférer les signaux pour l'état UI. Utiliser `BehaviorSubject` quand les opérateurs RxJS sont nécessaires ou pour des flux d'événements partagés.
+
+### Machine à états — enum + signal
+
+Modéliser les états possibles avec un enum évite les bugs de faute de frappe et force TypeScript à détecter les états invalides.
+
+```typescript
+export enum CombatState {
+  Idle = 'idle',
+  Fighting = 'fighting',
+  Victory = 'victory',
+  Defeat = 'defeat',
+}
+
+private _state = signal<CombatState>(CombatState.Idle);
+```
+
+### Séparer état de session et logs
+
+Ne pas mettre les logs dans le modèle de session — c'est un flux indépendant.
+
+- **Session** (`signal`) — état structuré du combat : héros, ennemi, tour
+- **Logs** (`BehaviorSubject`) — flux d'événements : chaque action ajoutée au fil du temps
+
+---
+
 ### Intercepteur fonctionnel — HttpInterceptorFn
 
 Un intercepteur se place entre Angular et le réseau — il voit toutes les requêtes avant qu'elles partent et toutes les réponses avant qu'elles arrivent.

@@ -66,17 +66,16 @@ La session de combat est l'état **en cours** d'un combat — elle n'est pas per
 
 ```typescript
 export interface CombatSessionModel {
-  hero: { hp: number; maxHp: number; attack: number; defense: number };
+  hero: HeroModel;
   enemy: EnemyModel;
   turn: number;
-  logs: string[];
 }
 ```
 
 - `hero` — copie des stats du héros pour ce combat (le héros principal n'est pas modifié)
 - `enemy` — l'ennemi affronté avec ses HP courants
 - `turn` — numéro du tour actuel
-- `logs` — journal des actions (ex: "Héros attaque pour 12 dégâts")
+- Les logs de combat sont gérés séparément via un `BehaviorSubject` dans le service (mission 029)
 
 ---
 
@@ -102,7 +101,7 @@ Dans `src/app/features/combat/combat.service.ts` :
 - Signal `_state` typé `CombatState`, initialisé à `Idle`
 - Signal `_session` typé `CombatSessionModel | null`, initialisé à `null`
 - Exposer les deux en lecture seule
-- Méthode `startCombat(enemy: EnemyModel)` — passe à `Fighting`, initialise la session
+- Méthode `startCombat(enemy: EnemyModel)` — passe à `Fighting`, initialise la session (sans logs)
 - Méthode `reset()` — repasse à `Idle`, session à `null`
 
 Pas encore d'attaque ni de logique de tour — juste la structure.

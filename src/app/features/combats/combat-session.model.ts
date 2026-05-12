@@ -5,5 +5,4 @@ export interface CombatSessionModel {
   hero: HeroModel;
   enemy: EnemyModel;
   turn: number;
-  logs: string[];
 }

@@ -37,6 +37,8 @@
 - 026-interceptors
 - 027-rxjs-operators
 - SQ-05-donjons
+- 028-combat-model
+- 029-rxjs-subject
 
 ## 🧠 Learned Concepts
 
