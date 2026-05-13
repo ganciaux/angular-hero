@@ -41,6 +41,7 @@
 - 029-rxjs-subject
 - 030-combat-logic
 - 031-combat-ui
+- 032-http-resource
 
 ## 🧠 Learned Concepts
 
@@ -149,6 +150,11 @@
 - Toujours reset `_loading` et `_error` avant de relancer une requête
 - Loading local (par feature) vs loading global (via intercepteur) — deux patterns différents
 - Intercepteurs : auth headers, logging, erreurs globales — pas pour le loading localisé
+- `httpResource<T>(url)` — remplace signal + subscribe pour les GET, expose `.value()`, `.isLoading()`, `.error()`, `.reload()`
+- `httpResource()` avec string = URL fixe, avec fonction = URL réactive (re-fetch si signal interne change)
+- `httpResource()` déclenche la requête à l'instanciation du service (lazy — à la première injection)
+- Service singleton → une seule requête partagée entre tous les composants qui l'injectent
+- `.reload()` dans le constructeur du composant pour re-fetch à chaque montage sans casser le singleton
 - `toSignal(obs$, { initialValue })` — convertit un Observable en signal, subscribe/unsubscribe automatique, `initialValue` requis
 - `toSignal()` dans le service plutôt que le composant — le signal est directement exposé en readonly, plus propre
 - `@switch` / `@case` — alternative à `@if` chaîné quand les états sont mutuellement exclusifs (machine à états en template)

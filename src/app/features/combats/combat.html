@@ -2,8 +2,12 @@
   @case (CombatState.Idle) {
     <h2>Choisir un adversaire</h2>
 
-    @for(enemie of combatService.enemies(); track enemie.id ){
-      <div>{{enemie.name}} - Niveau {{enemie.level}} <button (click)="combatService.startCombat(enemie)">Attaquer</button></div>
+    @if(combatService.enemiesResource.isLoading()){
+      <p>Loading enemies</p>
+    }@else {
+      @for(enemie of combatService.enemiesResource.value() ?? []; track enemie.id){
+        <div>{{enemie.name}} - Niveau {{enemie.level}} <button (click)="combatService.startCombat(enemie)">Attaquer</button></div>
+      }
     }
   }
   @case (CombatState.Fighting) {

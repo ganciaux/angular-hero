@@ -11,8 +11,4 @@ import { CombatState } from './combat-state.enum';
 export class Combat {
   protected combatService = inject(CombatService)
   protected readonly CombatState = CombatState;
-
-  constructor(){
-    this.combatService.loadEnemies()
-  }
 }

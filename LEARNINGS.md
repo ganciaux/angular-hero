@@ -1686,6 +1686,74 @@ Pour un signal d'état avec des cas mutuellement exclusifs, `@switch` est plus l
 
 ---
 
+## 🌐 httpResource() — chargement déclaratif
+
+Remplace le pattern manuel `signal + subscribe` pour les requêtes GET :
+
+```typescript
+import { httpResource } from '@angular/common/http';
+
+// Avant — 5 lignes
+private _enemies = signal<EnemyModel[]>([]);
+readonly enemies = this._enemies.asReadonly();
+loadEnemies() {
+  this.httpClient.get<EnemyModel[]>(url).subscribe(data => this._enemies.set(data));
+}
+
+// Après — 1 ligne
+readonly enemiesResource = httpResource<EnemyModel[]>(url);
+```
+
+### Signaux exposés automatiquement
+
+| Signal | Type | Description |
+|---|---|---|
+| `.value()` | `T \| undefined` | La donnée chargée |
+| `.isLoading()` | `boolean` | `true` pendant le chargement |
+| `.error()` | `unknown` | L'erreur si la requête échoue |
+| `.reload()` | méthode | Re-déclenche la requête |
+
+### URL statique vs URL réactive
+
+```typescript
+// Statique — fetch une fois à la création
+readonly enemies = httpResource<EnemyModel[]>('http://localhost:3000/enemies');
+
+// Réactive — re-fetch automatique quand selectedId() change
+readonly enemy = httpResource<EnemyModel>(() => `http://localhost:3000/enemies/${this.selectedId()}`);
+```
+
+La forme **fonction** active la réactivité : Angular re-déclenche la requête à chaque changement d'un signal lu à l'intérieur.
+
+### Quand la requête est déclenchée
+
+`httpResource()` démarre la requête à l'**instanciation du service** (à la première injection). Avec un service `providedIn: 'root'` (singleton), la requête n'est faite **qu'une seule fois**, même si plusieurs composants injectent le service.
+
+### Forcer un re-fetch à chaque montage de composant
+
+Si la liste doit être à jour à chaque navigation vers la page :
+
+```typescript
+// Dans le composant
+constructor() {
+  this.combatService.enemiesResource.reload();
+}
+```
+
+`reload()` re-déclenche la requête sans recréer le service — l'état du singleton est préservé.
+
+### Quand utiliser httpResource() vs pattern manuel
+
+| | `httpResource()` | Pattern manuel |
+|---|---|---|
+| GET simple | ✅ préféré | verbeux |
+| États auto (loading/error) | ✅ | à coder |
+| Re-fetch réactif | ✅ avec fonction | à coder |
+| POST / PATCH / DELETE | ⚠️ limité | ✅ naturel |
+| Logique métier au retour | ⚠️ | ✅ dans subscribe |
+
+---
+
 ### Intercepteur fonctionnel — HttpInterceptorFn
 
 Un intercepteur se place entre Angular et le réseau — il voit toutes les requêtes avant qu'elles partent et toutes les réponses avant qu'elles arrivent.
