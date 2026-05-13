@@ -4,19 +4,29 @@ import { CombatSessionModel } from './combat-session.model';
 import { EnemyModel } from './enemy.model';
 import { HeroService } from '../hero/hero.service';
 import { BehaviorSubject } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CombatService {
   private readonly heroService = inject(HeroService);
+  private readonly httpClient = inject(HttpClient)
   private _state=signal<CombatState>(CombatState.Idle);
+  private _enemies=signal<EnemyModel[]>([])
   private _session=signal<CombatSessionModel|null>(null);
   readonly state=this._state.asReadonly();
   readonly session=this._session.asReadonly();
+  readonly enemies=this._enemies.asReadonly();
 
   private _logs$ = new BehaviorSubject<string[]>([]);
   readonly logs$ = this._logs$.asObservable();
+  readonly logs = toSignal(this._logs$, { initialValue: [] as string[] });
+
+  loadEnemies(){
+    this.httpClient.get<EnemyModel[]>('http://localhost:3000/enemies').subscribe((data)=>(this._enemies.set(data)))
+  } 
 
   startCombat(enemy: EnemyModel){
     this._logs$.next([]);

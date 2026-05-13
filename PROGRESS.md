@@ -40,6 +40,7 @@
 - 028-combat-model
 - 029-rxjs-subject
 - 030-combat-logic
+- 031-combat-ui
 
 ## 🧠 Learned Concepts
 
@@ -148,4 +149,7 @@
 - Toujours reset `_loading` et `_error` avant de relancer une requête
 - Loading local (par feature) vs loading global (via intercepteur) — deux patterns différents
 - Intercepteurs : auth headers, logging, erreurs globales — pas pour le loading localisé
+- `toSignal(obs$, { initialValue })` — convertit un Observable en signal, subscribe/unsubscribe automatique, `initialValue` requis
+- `toSignal()` dans le service plutôt que le composant — le signal est directement exposé en readonly, plus propre
+- `@switch` / `@case` — alternative à `@if` chaîné quand les états sont mutuellement exclusifs (machine à états en template)
 

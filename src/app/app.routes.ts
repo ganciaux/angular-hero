@@ -61,6 +61,10 @@ export const routes: Routes = [
             loadComponent: () => import('./features/donjon/donjon-detail/donjon-detail').then((m) => m.DonjonDetail) }
         ]
       },
+      {
+        path: 'combats',
+        loadComponent: () => import('./features/combats/combat').then((m) => m.Combat),
+      },
     ],
   },
 ];

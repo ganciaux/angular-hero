@@ -1,3 +1,37 @@
-@if(combatService.state()===CombatState.Idle){
-  
+@switch (combatService.state()) {
+  @case (CombatState.Idle) {
+    <h2>Choisir un adversaire</h2>
+
+    @for(enemie of combatService.enemies(); track enemie.id ){
+      <div>{{enemie.name}} - Niveau {{enemie.level}} <button (click)="combatService.startCombat(enemie)">Attaquer</button></div>
+    }
+  }
+  @case (CombatState.Fighting) {
+    <div>
+        <div>Héros</div>
+        <div>HP: {{combatService.session()?.hero?.hp}}/{{combatService.session()?.hero?.maxHp}}</div>
+        <div>ATK: {{combatService.session()?.hero?.attack}} | DEF: {{combatService.session()?.hero?.defense}} </div>
+    </div>
+    <div>
+        <div>Ennemi</div>
+        <div>HP: {{combatService.session()?.enemy?.hp}}</div>
+        <div>ATK: {{combatService.session()?.enemy?.attack}} | DEF: {{combatService.session()?.enemy?.defense}} </div>
+    </div>
+    <button (click)="combatService.heroAttacks()">Attaquer</button>
+  }
+  @case (CombatState.Victory) {
+    <p>Victoire !</p>
+    <button (click)="combatService.reset()">Nouveau combat</button>
+  }
+  @case (CombatState.Defeat) {
+    <p>Défaite...</p>
+    <button (click)="combatService.reset()">Nouveau combat</button>
+  }
+  @default {
+    <p>Unknown</p>
+  }
+}
+
+@for(log of combatService.logs(); track log){
+  <div>{{log}}</div>
 }

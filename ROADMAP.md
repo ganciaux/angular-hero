@@ -367,18 +367,43 @@ Master asynchronous logic and complex state handling.
 
 ---
 
+## 🔁 Phase 8b — Modern Data Fetching
+
+### Concepts
+
+- `resource()` — chargement déclaratif lié à des signaux
+- `httpResource()` — wrapper HttpClient basé sur `resource()`
+- Gestion automatique des états loading / error / data
+- Comparaison avec le pattern manuel (signal + subscribe)
+
+### Missions
+
+- Refactoriser un service existant avec `httpResource()`
+- Comprendre quand utiliser `resource()` vs pattern manuel
+- Réactivité automatique : re-fetch quand un signal source change
+
+### Goal
+
+Adopter l'approche déclarative moderne pour le chargement de données, en remplacement du pattern `loadItems()` + signal + subscribe.
+
+> ⚠️ `resource()` et `httpResource()` sont encore expérimentaux en Angular 20 — l'API peut évoluer.
+
+---
+
 ## 🧾 Phase 9 — Forms & Progression
 
 ### Concepts
 
-- Reactive Forms
-- Validators
+- Signal Forms (expérimental, recommandé Angular 20+)
+- Reactive Forms (FormGroup, FormControl, FormBuilder) — comparaison
+- Validators synchrones et asynchrones
 - Form state management
 
 ### Missions
 
-- Create hero creation form
-- Add validation rules
+- Signal Forms : formulaire avec validation intégrée
+- Reactive Forms : comparaison FormGroup / FormControl
+- Validators synchrones et asynchrones
 - Implement leveling system
 - Manage quests and rewards
 

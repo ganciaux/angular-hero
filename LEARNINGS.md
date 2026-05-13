@@ -1620,6 +1620,72 @@ Les méthodes internes (`enemyAttacks`, `onVictory`, `onDefeat`) sont `private` 
 
 ---
 
+## 🔁 toSignal() — Observable → Signal
+
+```typescript
+import { toSignal } from '@angular/core/rxjs-interop';
+
+readonly logs = toSignal(this._logs$, { initialValue: [] as string[] });
+```
+
+- Subscribe automatiquement à l'Observable
+- Se désabonne à la destruction du composant/service
+- `initialValue` — valeur émise avant le premier événement (obligatoire si l'Observable n'émet pas synchrone)
+- Dans le template : `logs()` comme n'importe quel signal
+
+### Où placer toSignal() — service ou composant ?
+
+Placer `toSignal()` dans le **service** est plus propre quand le signal doit être exposé en lecture seule à plusieurs composants :
+
+```typescript
+// Service — préféré quand partagé
+readonly logs = toSignal(this._logs$, { initialValue: [] as string[] });
+```
+
+```typescript
+// Composant — quand le signal est local à ce composant uniquement
+readonly logs = toSignal(this.combatService.logs$, { initialValue: [] as string[] });
+```
+
+### toSignal() vs async pipe
+
+| | `async pipe` | `toSignal()` |
+|---|---|---|
+| Syntaxe template | `logs$ \| async` | `logs()` |
+| Cohérence | Mélange signal/Observable | Tout signal |
+| Null safety | retourne `null` avant la 1ère valeur | `initialValue` requis |
+| Angular moderne | ✅ | ✅ préféré |
+
+---
+
+## 🔀 @switch en template — machine à états
+
+Pour un signal d'état avec des cas mutuellement exclusifs, `@switch` est plus lisible qu'une chaîne `@if / @else if` :
+
+```html
+@switch (combatService.state()) {
+  @case (CombatState.Idle) {
+    <!-- liste des ennemis -->
+  }
+  @case (CombatState.Fighting) {
+    <!-- écran de combat -->
+  }
+  @case (CombatState.Victory) {
+    <!-- victoire -->
+  }
+  @case (CombatState.Defeat) {
+    <!-- défaite -->
+  }
+  @default {
+    <!-- fallback -->
+  }
+}
+```
+
+`@switch` est idéal quand : les états sont mutuellement exclusifs, la valeur comparée est un enum, et il y a plus de 2 cas.
+
+---
+
 ### Intercepteur fonctionnel — HttpInterceptorFn
 
 Un intercepteur se place entre Angular et le réseau — il voit toutes les requêtes avant qu'elles partent et toutes les réponses avant qu'elles arrivent.
