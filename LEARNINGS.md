@@ -1754,6 +1754,110 @@ constructor() {
 
 ---
 
+## 📝 Reactive Forms
+
+### Les briques de base
+
+```typescript
+import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
+
+private fb = inject(FormBuilder);
+
+form = this.fb.nonNullable.group({
+  name: ['', [Validators.required, Validators.minLength(2)]],
+  heroClass: ['warrior' as HeroClass, [Validators.required]],
+  level: [1, [Validators.min(1), Validators.max(5)]],
+});
+```
+
+- `FormGroup` — groupe de contrôles qui forment un formulaire
+- `FormControl` — un champ avec sa valeur et ses validateurs
+- `FormBuilder` — raccourci pour créer `FormGroup` + `FormControl` sans `new`
+
+### fb.nonNullable vs fb normal
+
+| | `fb.group()` | `fb.nonNullable.group()` |
+|---|---|---|
+| Type des valeurs | `T \| null` | `T` |
+| `reset()` | remet à `null` | remet aux valeurs initiales |
+| Usage | formulaires sans defaults | formulaires avec valeurs par défaut |
+
+```typescript
+// fb normal — reset() vide tout
+form.reset() // → name = null
+
+// fb.nonNullable — reset() restaure les valeurs initiales
+form.reset() // → name = 'Hero' (valeur fournie au départ)
+```
+
+### form.value vs getRawValue()
+
+```typescript
+form = this.fb.group({
+  id: [{ value: hero.id, disabled: true }],  // champ disabled
+  name: ['', Validators.required],
+});
+
+form.value         // { name: '...' }          ← id absent (disabled exclus)
+form.getRawValue() // { id: '123', name: '...' } ← tous les champs inclus
+```
+
+**Règle** : utiliser `getRawValue()` avec `fb.nonNullable` pour des types propres sans nulls ni `!`. Utiliser `form.value` si aucun champ n'est disabled et que les nulls ne gênent pas.
+
+### Binding template
+
+```html
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <input formControlName="name" />
+  <select formControlName="heroClass">
+    <option value="warrior">Warrior</option>
+  </select>
+  <button type="submit" [disabled]="form.invalid">Confirmer</button>
+</form>
+```
+
+### Affichage des erreurs
+
+```html
+@if (form.controls.name.invalid && form.controls.name.touched) {
+  @if (form.controls.name.errors?.['required']) {
+    <p>Le nom est requis</p>
+  }
+  @if (form.controls.name.errors?.['minlength']) {
+    <p>Minimum 2 caractères</p>
+  }
+}
+```
+
+- `touched` — évite d'afficher les erreurs dès l'ouverture du formulaire
+- `errors?.['key']` — accès sécurisé à l'objet d'erreurs
+
+### Validators disponibles
+
+| Validator | Usage |
+|---|---|
+| `Validators.required` | Champ non vide |
+| `Validators.minLength(n)` | Longueur minimale |
+| `Validators.maxLength(n)` | Longueur maximale |
+| `Validators.min(n)` | Valeur numérique minimale |
+| `Validators.max(n)` | Valeur numérique maximale |
+| `Validators.email` | Format email |
+
+### Validator custom
+
+Quand aucun validator built-in ne couvre le besoin :
+
+```typescript
+function heroClassValidator(control: AbstractControl) {
+  const valid = ['warrior', 'magician', 'elf'].includes(control.value);
+  return valid ? null : { invalidClass: true };
+}
+```
+
+Retourne `null` si valide, un objet d'erreur sinon. Pour un `<select>` avec options fixes, inutile — l'UI contraint déjà les valeurs.
+
+---
+
 ### Intercepteur fonctionnel — HttpInterceptorFn
 
 Un intercepteur se place entre Angular et le réseau — il voit toutes les requêtes avant qu'elles partent et toutes les réponses avant qu'elles arrivent.

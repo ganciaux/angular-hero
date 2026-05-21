@@ -42,6 +42,7 @@
 - 030-combat-logic
 - 031-combat-ui
 - 032-http-resource
+- 033-reactive-forms
 
 ## 🧠 Learned Concepts
 
@@ -155,6 +156,14 @@
 - `httpResource()` déclenche la requête à l'instanciation du service (lazy — à la première injection)
 - Service singleton → une seule requête partagée entre tous les composants qui l'injectent
 - `.reload()` dans le constructeur du composant pour re-fetch à chaque montage sans casser le singleton
+- Reactive Forms — `FormGroup`, `FormControl`, `FormBuilder`, `Validators`
+- `fb.nonNullable.group()` — contrôles non-nullables, `reset()` restaure les valeurs initiales (pas `null`)
+- `form.getRawValue()` — retourne tous les champs typés sans nulls, y compris les disabled
+- `form.value` — exclut les champs disabled, types nullables
+- `formControlName`, `[formGroup]`, `(ngSubmit)` — binding template reactive forms
+- Affichage erreurs : `control.invalid && control.touched` + `errors?.['key']`
+- `[disabled]="form.invalid"` — bouton désactivé si formulaire invalide
+- Lookup table `Record<HeroClass, Stats>` — remplace la chaîne if/else, extensible sans modifier la logique
 - `toSignal(obs$, { initialValue })` — convertit un Observable en signal, subscribe/unsubscribe automatique, `initialValue` requis
 - `toSignal()` dans le service plutôt que le composant — le signal est directement exposé en readonly, plus propre
 - `@switch` / `@case` — alternative à `@if` chaîné quand les états sont mutuellement exclusifs (machine à états en template)

@@ -1,0 +1,37 @@
+<h2>Update hero</h2>
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <input formControlName="name" required/>
+  @if (form.controls.name.invalid && form.controls.name.touched) {
+    @if (form.controls.name.errors?.['required']) {
+      <p>Le nom est requis</p>
+    }
+    @if (form.controls.name.errors?.['minlength']) {
+      <p>Minimum 2 caractères</p>
+    }
+  }
+  <input formControlName="level" type="number" required/>
+  @if (form.controls.level.invalid && form.controls.level.touched) {
+    @if (form.controls.level.errors?.['required']) {
+      <p>Le level est requis</p>
+    }
+    @if (form.controls.level.errors?.['min']) {
+      <p>Level minimum est 1</p>
+    }
+    @if (form.controls.level.errors?.['max']) {
+      <p>Level maximum est 5</p>
+    }
+  }
+  <select formControlName="heroClass" required>
+    <option value="warrior">warrior</option>
+    <option value="elf">elf</option>
+    <option value="magician">magician</option>
+  </select>
+  @if (form.controls.heroClass.invalid && form.controls.heroClass.touched) {
+    @if (form.controls.heroClass.errors?.['required']) {
+      <p>La classe est requise</p>
+    }
+  }
+  <button type="submit" [disabled]="form.invalid">Confirmer</button>
+  <button type="button" (click)="onReset()">Annuler</button>
+</form>

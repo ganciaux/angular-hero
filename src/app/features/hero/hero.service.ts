@@ -1,5 +1,5 @@
 import { Injectable, signal } from '@angular/core';
-import { HeroModel } from './hero.model';
+import { HeroClass, HeroModel } from './hero.model';
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +13,8 @@ export class HeroService {
     xp: 0,
     xpNextLevel: 100,
     attack: 10,
-    defense: 10
+    defense: 10,
+    heroClass: 'warrior'
   });
 
   private _actionLogs = signal<string[]>([]);
@@ -54,4 +55,15 @@ export class HeroService {
     this.updateHP(maxHp);
     this.updateLogs(`Hero healed for ${maxHp} HP!`);
   }
+
+  configure(name: string, heroClass: HeroClass, level: number): void{
+    this._hero.update((h) => ({...h, name, heroClass, level,  maxHp: this.CLASS_STATS[heroClass].hp, ...this.CLASS_STATS[heroClass]})) 
+  }
+
+  private readonly CLASS_STATS: Record<HeroClass, { hp: number; attack: number; defense: number }> = {
+    warrior: { hp: 120, attack: 15, defense: 10 },
+    magician: { hp: 70, attack: 20, defense: 5 },
+    elf: { hp: 90, attack: 12, defense: 8 },
+  };
+
 }

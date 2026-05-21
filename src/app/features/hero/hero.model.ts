@@ -1,3 +1,5 @@
+export type HeroClass = 'warrior' | 'magician' | 'elf';
+
 export interface HeroModel{
   name: string;
   level: number;
@@ -7,5 +9,6 @@ export interface HeroModel{
   xpNextLevel: number;
   attack: number;
   defense: number;
+  heroClass: HeroClass;
 }
   
