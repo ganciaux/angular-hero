@@ -1,1 +1,9 @@
-<p>hero-settings works!</p>
+<h2>hero-settings</h2>
+
+<form (submit)="onSubmit()">
+  <input type="text" [formField]="heroForm.name"/>
+  <input type="number" [formField]="heroForm.level"/>
+  <select [formField]="heroForm.heroClass"></select>
+  <button [disabled]="heroForm().invalid()">Valider</button>
+</form>
+
