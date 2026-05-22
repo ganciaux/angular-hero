@@ -27,6 +27,10 @@ export const routes: Routes = [
         loadComponent: () => import('./features/hero/hero-create/hero-create').then((m) => m.HeroCreate),
       },
       {
+        path:'hero-settings',
+        loadComponent: () => import('./features/hero/hero-settings/hero-settings').then((m) => m.HeroSettings),
+      },
+      {
         path: 'inventory',
         loadComponent: () => import('./features/inventory/inventory').then((m) => m.Inventory),
         children: [
